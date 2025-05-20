@@ -1,28 +1,39 @@
 'use client';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+const RegisterForm = () => {
+  const router = useRouter();
 
-const LoginForm = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // handle form submission logic here
+    console.log("Form submitted");
+  };
+
   return (
 <div className={cn("flex flex-col gap-6 items-center justify-center")}>
   <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
     <CardHeader className="text-center">
-      <CardTitle className="text-xl">Welcome back</CardTitle>
-      {/* Optional Description */}
+      <CardTitle className="text-xl">Register Here</CardTitle>
+      <CardDescription className="text-gray-600 dark:text-gray-600">
+        Enter your details
+      </CardDescription>
     </CardHeader>
     <CardContent>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="grid gap-6">
           <div className="grid gap-6">
             <div className="grid gap-3">
@@ -36,15 +47,7 @@ const LoginForm = () => {
               />
             </div>
             <div className="grid gap-3">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <a
-                  href="/forgot_password"
-                  className="ml-auto text-sm underline-offset-4 hover:underline text-blue-600 dark:text-blue-600"
-                >
-                  Forgot your password?
-                </a>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -56,17 +59,17 @@ const LoginForm = () => {
               type="submit"
               className="w-full dark:!bg-black dark:text-white"
             >
-              Login
+              Register
             </Button>
           </div>
           <div className="text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <a
-              href="/registr"
+            Already have an account?{" "}
+            <Link
+              href="/login"
               className="underline underline-offset-4 text-blue-600 dark:text-blue-600"
             >
-              Register here
-            </a>
+              Login
+            </Link>
           </div>
         </div>
       </form>
@@ -79,7 +82,7 @@ const LoginForm = () => {
     <a href="#" className="text-blue-600 dark:text-blue-600">Privacy Policy</a>.
   </div>
 </div>
-  )
-}
+  );
+};
 
-export default LoginForm;
+export default RegisterForm;

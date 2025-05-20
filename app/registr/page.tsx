@@ -1,8 +1,8 @@
 // import { GalleryVerticalEnd } from "lucide-react"
 
-import  LoginForm  from "@/app/login/login-form"
+import RegistrForm  from "./registr-form"
 
-export default function LoginPage() {
+export default function RegistrPage() {
   return (
     <div className="bg-gradient-to-br from-teal-50 via-teal-100 to-teal-200 flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -12,7 +12,7 @@ export default function LoginPage() {
           </div>
           Acme Inc.
         </a> */}       
-        <LoginForm />
+        <RegistrForm />
       </div>
     </div>
   )
