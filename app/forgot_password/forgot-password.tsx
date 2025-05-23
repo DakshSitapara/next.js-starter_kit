@@ -13,12 +13,11 @@ const ForgotPasswordFrom = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // You can add logic here for submitting the email
     console.log("Password reset link sent to:", email);
   };
 
   return (
-<div className="flex flex-col gap-6 items-center justify-center">
+<div className={cn("flex flex-col gap-6 items-center justify-center")}>
   <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
     <CardHeader className="text-center">
       <CardTitle className="text-xl">Forgot your password?</CardTitle>
@@ -44,14 +43,21 @@ const ForgotPasswordFrom = () => {
           Send Reset Link
         </Button>
         <div className="text-center text-sm">
-          <Link href="/login" className="underline underline-offset-4 text-blue-600 dark:text-blue-600">
+          <Link href="/login" className="uml-auto text-sm underline-offset-4 hover:underline text-blue-600 dark:text-blue-600">
             Back to Login
           </Link>
         </div>
       </form>
     </CardContent>
   </Card>
+  <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+    By clicking continue, you agree to our{" "}
+    <a href="#" className="text-blue-600 dark:text-blue-600">Terms of Service</a>{" "}
+    and{" "}
+    <a href="#" className="text-blue-600 dark:text-blue-600">Privacy Policy</a>.
+  </div>
 </div>
+
   );
 };
 

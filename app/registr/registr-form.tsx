@@ -19,8 +19,9 @@ const RegisterForm = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // handle form submission logic here
+
     console.log("Form submitted");
+    router.push('/dashboard');
   };
 
   return (
@@ -66,7 +67,7 @@ const RegisterForm = () => {
             Already have an account?{" "}
             <Link
               href="/login"
-              className="underline underline-offset-4 text-blue-600 dark:text-blue-600"
+              className="ml-auto text-sm underline-offset-4 hover:underline text-blue-600 dark:text-blue-600"
             >
               Login
             </Link>

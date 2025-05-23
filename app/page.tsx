@@ -102,7 +102,7 @@ export default function HeroSection() {
           <Link
             href="https://github.com/DakshSitapara/next.js-starter_kit"
             target="_blank"
-            className="flex items-center gap-2 rounded-full px-6 py-2 h-12 border-2 bg-white hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors"
+            className="flex items-center gap-2 rounded-full px-6 py-2 h-12 border-2 bg-black hover:bg-gray-800 dark:hover:bg-gray-800 transition-colors"
             aria-label="View on GitHub"
           >
             <Github className="w-5 h-5 bg-transparent" aria-hidden="true" />

@@ -14,15 +14,24 @@ import { useRouter } from 'next/navigation';
 
 
 const LoginForm = () => {
+    const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log("Login successful");
+    router.push('/dashboard');
+  };
+
   return (
 <div className={cn("flex flex-col gap-6 items-center justify-center")}>
   <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
     <CardHeader className="text-center">
       <CardTitle className="text-xl">Welcome back</CardTitle>
-      {/* Optional Description */}
+      
     </CardHeader>
     <CardContent>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="grid gap-6">
           <div className="grid gap-6">
             <div className="grid gap-3">
@@ -63,7 +72,7 @@ const LoginForm = () => {
             Don&apos;t have an account?{" "}
             <a
               href="/registr"
-              className="underline underline-offset-4 text-blue-600 dark:text-blue-600"
+              className="ml-auto text-sm underline-offset-4 hover:underline text-blue-600 dark:text-blue-600"
             >
               Register here
             </a>
