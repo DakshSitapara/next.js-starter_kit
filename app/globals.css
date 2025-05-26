@@ -130,3 +130,10 @@ input[type="button"],
 [tabindex]:not([tabindex="-1"]) {
   cursor: pointer;
 }
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}

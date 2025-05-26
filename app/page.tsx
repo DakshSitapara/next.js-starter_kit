@@ -37,7 +37,7 @@ import { motion } from "motion/react";
 
 export default function HeroSection() {
   return (
-    <div className="items-center-safe bg-black ">
+    <div className="items-center-safe bg-neutral-900  ">
     <section
       className="relative flex flex-col items-center justify-center py-49"
       aria-label="Nextjs Starter Kit Hero"

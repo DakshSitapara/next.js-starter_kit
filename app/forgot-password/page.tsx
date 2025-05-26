@@ -1,5 +1,5 @@
 
-import  ForgotPasswordForm  from "@/app/forgot_password/forgot-password"
+import  ForgotPasswordForm  from "@/app/forgot-password/forgot-password"
 
 export default function ForgotPasswordPage() {
   return (

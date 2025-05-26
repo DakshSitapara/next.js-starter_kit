@@ -29,6 +29,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { useRouter } from "next/navigation";
+import { useState ,useEffect } from "react"
+import { Button } from "./ui/button"
 
 export function NavUser({
   user,
@@ -39,7 +42,22 @@ export function NavUser({
     avatar: string
   }
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
+  
+    useEffect(() => {
+    if (typeof window === "undefined") return;{
+    }
+    setIsMounted(true);
+  }, []);
+
+   const handleLogout = () => {
+    router.push("/login");
+  };
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <SidebarMenu>
@@ -103,8 +121,7 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOut />
-              Log out
+              <LogOut /> Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

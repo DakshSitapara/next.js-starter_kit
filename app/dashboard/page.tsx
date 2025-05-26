@@ -1,6 +1,6 @@
 "use client";
 
-import { AppSidebar } from "@/components/app-sidebar"
+import { DashboardSidebar } from "@/components/dashboard-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -29,7 +29,7 @@ export default function Page() {
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <DashboardSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center justify-between px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2">
@@ -38,12 +38,13 @@ export default function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
+                Home
+                  {/* <BreadcrumbLink href="#">Home</BreadcrumbLink> */}
                 </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
+                {/* <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                  <BreadcrumbPage></BreadcrumbPage>
+                </BreadcrumbItem> */}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
