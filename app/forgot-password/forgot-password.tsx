@@ -1,24 +1,27 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
+import * as EmailJS from '@emailjs/browser';
+import { z } from 'zod';
+import Link from 'next/link';
+
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { z } from 'zod';
+import { Label } from '@/components/ui/label';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),
 });
 
-const ForgotPasswordForm = () => {
-  const router = useRouter();
+const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,21 +32,46 @@ const ForgotPasswordForm = () => {
       // Validate email
       forgotPasswordSchema.parse({ email });
 
-      // Check if user exists in localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]') as { email: string }[];
+      // Check if user exists
+      const users = JSON.parse(localStorage.getItem('users') || '[]') as { email: string; password: string }[];
       const user = users.find((u) => u.email === email);
       if (!user) {
         throw new Error('Email not found');
       }
 
-      // Redirect to reset password page with email as query parameter
-      router.push(`/reset-password?email=${encodeURIComponent(email)}`);
-    } catch (error) {
-      console.error('Error processing forgot password:', error);
-      if (error instanceof z.ZodError) {
-        setError(error.errors[0].message);
+      // Generate reset token
+      const token = crypto.randomUUID();
+      const expires = Date.now() + 3600000; // 1 hour
+      const resetTokens = JSON.parse(localStorage.getItem('resetTokens') || '[]');
+      localStorage.setItem(
+        'resetTokens',
+        JSON.stringify([{ email, token, expires }, ...resetTokens])
+      );
+
+      // Send email with reset link
+      const resetLink = `${window.location.origin}/reset-password?token=${token}&email=${encodeURIComponent(email)}`;
+      const templateParams = {
+        user_name: email.split('@')[0],
+        reset_link: resetLink,
+        to_email: email,
+      };
+
+      await EmailJS.send(
+        'service_vcqch3g',
+        'template_4wrepi6',
+        templateParams,
+        'EJvNEd7USjV7sgMNH'
+      );
+
+      toast.success('Reset link sent to your email.');
+      router.push('/login');
+    } catch (err) {
+      console.error('Forgot password error:', err);
+      if (err instanceof z.ZodError) {
+        setError(err.errors[0].message);
       } else {
-        setError(error instanceof Error ? error.message : 'An unexpected error occurred');
+        setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+        toast.error(err instanceof Error ? err.message : 'Failed to send reset link.');
       }
     } finally {
       setIsLoading(false);
@@ -56,7 +84,7 @@ const ForgotPasswordForm = () => {
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Forgot your password?</CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-600">
-            Enter your email address to reset your password.
+            Enter your email address to receive a reset link.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -82,9 +110,8 @@ const ForgotPasswordForm = () => {
                 type="submit"
                 disabled={isLoading}
                 className="w-full dark:!bg-black dark:text-white"
-                aria-label="Continue"
               >
-                {isLoading ? 'Processing...' : 'Continue'}
+                {isLoading ? 'Sending...' : 'Send Reset Link'}
               </Button>
               <div className="text-center text-sm">
                 <Link
@@ -112,4 +139,4 @@ const ForgotPasswordForm = () => {
   );
 };
 
-export default ForgotPasswordForm;
+export default ForgotPassword;
