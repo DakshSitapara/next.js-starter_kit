@@ -106,16 +106,19 @@ export default function ResetPasswordPage() {
 
   if (!isValidToken) {
     return (
-      <div className="flex flex-col gap-6 items-center justify-center">
+    <div className={cn('flex flex-col gap-6 items-center justify-center')}>
       <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
-          <CardHeader>
-            <CardTitle>Invalid Link</CardTitle>
+          <CardHeader className=" text-center">
+            <CardTitle className="text-xl">Invalid Link</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="mb-4 text-gray-900 dark:text-gray-900">
+            <p className="mb-4 text-justify-center text-gray-700 dark:text-gray-700">
               The reset link is invalid or has expired. Please request a new one.
             </p>
-            <Button onClick={() => router.push('/forgot-password')}>Request New Link</Button>
+            <Button 
+              onClick={() => router.push('/forgot-password')}
+              className="w-full dark:!bg-black dark:text-white"
+              >Request New Link</Button>
           </CardContent>
         </Card>
       </div>
@@ -141,6 +144,7 @@ export default function ResetPasswordPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none"
               />
             </div>
 
@@ -159,7 +163,7 @@ export default function ResetPasswordPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full dark:bg-white dark:text-black"
+                className="w-full dark:!bg-black dark:text-white"
             >
               {isLoading ? 'Resetting...' : 'Reset Password'}
             </Button>
