@@ -76,7 +76,14 @@ export default function ResetPasswordPage() {
       const userIndex = users.findIndex((u) => u.email === email);
       if (userIndex === -1) throw new Error('User not found');
 
-      users[userIndex].password = simpleHash(password);
+      // Check if new password matches the current password
+      const currentHashedPassword = users[userIndex].password;
+      const newHashedPassword = simpleHash(password);
+      if (newHashedPassword === currentHashedPassword) {
+        throw new Error('New password cannot be the same as the current password');
+      }
+
+      users[userIndex].password = newHashedPassword;
       localStorage.setItem('users', JSON.stringify(users));
 
       const tokens = JSON.parse(localStorage.getItem('resetTokens') || '[]') as {
@@ -106,19 +113,21 @@ export default function ResetPasswordPage() {
 
   if (!isValidToken) {
     return (
-    <div className={cn('flex flex-col gap-6 items-center justify-center')}>
-      <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
-          <CardHeader className=" text-center">
+      <div className={cn('flex flex-col gap-6 items-center justify-center')}>
+        <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
+          <CardHeader className="text-center">
             <CardTitle className="text-xl">Invalid Link</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="mb-4 text-justify-center text-gray-700 dark:text-gray-700">
               The reset link is invalid or has expired. Please request a new one.
             </p>
-            <Button 
+            <Button
               onClick={() => router.push('/forgot-password')}
               className="w-full dark:!bg-black dark:text-white"
-              >Request New Link</Button>
+            >
+              Request New Link
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -163,7 +172,7 @@ export default function ResetPasswordPage() {
             <Button
               type="submit"
               disabled={isLoading}
-                className="w-full dark:!bg-black dark:text-white"
+              className="w-full dark:!bg-black dark:text-white"
             >
               {isLoading ? 'Resetting...' : 'Reset Password'}
             </Button>

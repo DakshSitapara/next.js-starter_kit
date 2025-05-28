@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import * as EmailJS from '@emailjs/browser';
 import { z } from 'zod';
 import Link from 'next/link';
 
@@ -29,49 +28,27 @@ const ForgotPassword = () => {
     setIsLoading(true);
 
     try {
-      // Validate email
       forgotPasswordSchema.parse({ email });
 
-      // Check if user exists
       const users = JSON.parse(localStorage.getItem('users') || '[]') as { email: string; password: string }[];
       const user = users.find((u) => u.email === email);
       if (!user) {
         throw new Error('Email not found');
       }
 
-      // Generate reset token
       const token = crypto.randomUUID();
       const expires = Date.now() + 3600000; // 1 hour
       const resetTokens = JSON.parse(localStorage.getItem('resetTokens') || '[]');
-      localStorage.setItem(
-        'resetTokens',
-        JSON.stringify([{ email, token, expires }, ...resetTokens])
-      );
+      localStorage.setItem('resetTokens', JSON.stringify([{ email, token, expires }, ...resetTokens]));
 
-      // Send email with reset link
-      const resetLink = `${window.location.origin}/reset-password?token=${token}&email=${encodeURIComponent(email)}`;
-      const templateParams = {
-        user_name: email.split('@')[0],
-        reset_link: resetLink,
-        to_email: email,
-      };
-
-      await EmailJS.send(
-        'service_vcqch3g',
-        'template_4wrepi6',
-        templateParams,
-        'EJvNEd7USjV7sgMNH'
-      );
-
-      toast.success('Reset link sent to your email.');
-      router.push('/login');
+      toast.success('Redirecting to reset password...');
+      router.push(`/reset-password?token=${token}&email=${encodeURIComponent(email)}`);
     } catch (err) {
-      console.error('Forgot password error:', err);
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
       } else {
         setError(err instanceof Error ? err.message : 'An unexpected error occurred');
-        toast.error(err instanceof Error ? err.message : 'Failed to send reset link.');
+        toast.error(err instanceof Error ? err.message : 'Failed to process request.');
       }
     } finally {
       setIsLoading(false);
@@ -80,12 +57,10 @@ const ForgotPassword = () => {
 
   return (
     <div className={cn('flex flex-col gap-6 items-center justify-center')}>
-      <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
+      <Card className="w-full max-w-md border bg-transparent border-gray-200 text-black shadow-md">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Forgot your password?</CardTitle>
-          <CardDescription className="text-gray-600 dark:text-gray-600">
-            Enter your email address to receive a reset link.
-          </CardDescription>
+          <CardDescription className="text-gray-600">We'll redirect you to reset it if your email is found.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} noValidate>
@@ -96,45 +71,22 @@ const ForgotPassword = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  aria-invalid={!!error}
-                  aria-describedby={error ? 'email-error' : undefined}
-                  className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none"
-                  data-testid="email-input"
+                  className="bg-transparent text-black border-gray-300"
                 />
               </div>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full dark:!bg-black dark:text-white"
-              >
-                {isLoading ? 'Sending...' : 'Send Reset Link'}
+              <Button type="submit" disabled={isLoading} className="w-full dark:!bg-black dark:text-white">
+                {isLoading ? 'Checking...' : 'Check Email'}
               </Button>
               <div className="text-center text-sm">
-                <Link
-                  href="/login"
-                  className="text-sm underline-offset-4 hover:underline text-blue-600 dark:text-blue-600"
-                >
-                  Back to Login
-                </Link>
+                <Link href="/login" className="text-blue-600 hover:underline">Back to Login</Link>
               </div>
             </div>
           </form>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our{' '}
-        <a href="#" className="text-blue-600 dark:text-blue-600">
-          Terms of Service
-        </a>{' '}
-        and{' '}
-        <a href="#" className="text-blue-600 dark:text-blue-600">
-          Privacy Policy
-        </a>.
-      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 // import { GalleryVerticalEnd } from "lucide-react"
 
-import ResetPasswordForm  from "./reset-password"
+import ResetPasswordPage  from "./reset-password"
 
 export default function RegistrPage() {
   return (
@@ -12,7 +12,7 @@ export default function RegistrPage() {
           </div>
           Acme Inc.
         </a> */}       
-        <ResetPasswordForm />
+        <ResetPasswordPage />
       </div>
     </div>
   )
