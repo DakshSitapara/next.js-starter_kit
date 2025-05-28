@@ -6,38 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar as CalendarIcon, Plus, Clock } from "lucide-react";
 
 const events = [
-  {
-    id: 1,
-    title: "Team Meeting",
-    time: "09:00 AM",
-    date: "Today",
-    type: "meeting",
-    attendees: 5,
-  },
-  {
-    id: 2,
-    title: "Product Review",
-    time: "02:00 PM",
-    date: "Today",
-    type: "review",
-    attendees: 3,
-  },
-  {
-    id: 3,
-    title: "Client Call",
-    time: "11:00 AM",
-    date: "Tomorrow",
-    type: "call",
-    attendees: 2,
-  },
-  {
-    id: 4,
-    title: "Project Deadline",
-    time: "All Day",
-    date: "Mar 15",
-    type: "deadline",
-    attendees: 8,
-  },
+  { id: 1, title: "Team Meeting", time: "09:00 AM", date: "2025-05-05", type: "meeting", attendees: 5 },
+  { id: 2, title: "Product Review", time: "02:00 PM", date: "2025-05-08", type: "review", attendees: 3 },
+  { id: 3, title: "Client Call", time: "11:00 AM", date: "2025-05-14", type: "call", attendees: 2 },
+  { id: 4, title: "Project Deadline", time: "All Day", date: "2025-05-28", type: "deadline", attendees: 8 },
 ];
 
 const upcomingEvents = [
@@ -47,6 +19,29 @@ const upcomingEvents = [
 ];
 
 export default function Calendar() {
+  const now = new Date();
+  const year = 2025;
+  const month = 4; 
+  const today = new Date();
+
+  const startDate = new Date(year, month, 1);
+  const endDate = new Date(year, month + 1, 0);
+  const startDay = startDate.getDay(); 
+
+  const daysInMonth = endDate.getDate();
+  const calendarDays = Array.from({ length: 42 }, (_, i) => {
+    const day = i - startDay + 1;
+    if (day > 0 && day <= daysInMonth) {
+      return new Date(year, month, day);
+    }
+    return null;
+  });
+
+  const getDateString = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+  const eventDates = events.map((e) => e.date);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -66,7 +61,7 @@ export default function Calendar() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
                 <CalendarIcon className="h-5 w-5" />
-                March 2024
+                May 2025
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -78,23 +73,25 @@ export default function Calendar() {
                 ))}
               </div>
               <div className="grid grid-cols-7 gap-2">
-                {Array.from({ length: 35 }, (_, i) => {
-                  const day = i - 2; // Offset for month start
-                  const isCurrentMonth = day > 0 && day <= 31;
-                  const isToday = day === 14;
-                  const hasEvent = [5, 8, 14, 22, 28].includes(day);
+                {calendarDays.map((date, i) => {
+                  const isToday =
+                    date &&
+                    today.getDate() === date.getDate() &&
+                    today.getMonth() === date.getMonth() &&
+                    today.getFullYear() === date.getFullYear();
+
+                  const hasEvent = date && eventDates.includes(getDateString(date));
 
                   return (
                     <div
                       key={i}
-                      className={`
-                        h-10 flex items-center justify-center text-sm cursor-pointer rounded-md
-                        ${isCurrentMonth ? 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700' : 'text-gray-300 dark:text-gray-600'}
-                        ${isToday ? 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600' : ''}
+                      className={`h-10 flex items-center justify-center text-sm rounded-md cursor-pointer
+                        ${date ? 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700' : 'text-gray-300 dark:text-gray-600'}
+                        ${isToday ? 'bg-blue-600 dark:bg-blue-500 text-white' : ''}
                         ${hasEvent && !isToday ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300' : ''}
                       `}
                     >
-                      {isCurrentMonth ? day : ''}
+                      {date ? date.getDate() : ''}
                     </div>
                   );
                 })}
@@ -167,7 +164,9 @@ export default function Calendar() {
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900 dark:text-gray-100">{event.title}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{event.date} at {event.time}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {event.date} at {event.time}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">

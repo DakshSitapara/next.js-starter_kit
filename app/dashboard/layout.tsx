@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -55,10 +56,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Button>
           </div>
         </header>
+            <ScrollArea className="h-168 w-full pr-4 scrollbar-none">
         <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {children}
         </main>
+          <ScrollBar orientation="vertical" className="hidden" />
+        </ScrollArea>
       </SidebarInset>
     </SidebarProvider>
+     
   );
 }
