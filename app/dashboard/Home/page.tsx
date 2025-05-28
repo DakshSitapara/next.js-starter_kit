@@ -13,7 +13,6 @@ import {
   ArrowUpRight, DollarSign, Users, CreditCard, Activity, Calendar,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 // Mock data for the chart
 const chartData = [
@@ -122,7 +121,7 @@ export default function Dashboard01() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Total Revenue
             </CardTitle>
             <DollarSign className="h-4 w-4 text-gray-500 dark:text-gray-400" />

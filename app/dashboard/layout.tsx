@@ -56,7 +56,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Button>
           </div>
         </header>
-            <ScrollArea className="h-168 w-full pr-4 scrollbar-none">
+            <ScrollArea className="h-168 w-full scrollbar-hidden">
         <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {children}
         </main>
