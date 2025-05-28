@@ -1,7 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Calendar as CalendarIcon, Plus, Clock } from "lucide-react"
+'use client';
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Calendar as CalendarIcon, Plus, Clock } from "lucide-react";
 
 const events = [
   {
@@ -10,7 +12,7 @@ const events = [
     time: "09:00 AM",
     date: "Today",
     type: "meeting",
-    attendees: 5
+    attendees: 5,
   },
   {
     id: 2,
@@ -18,7 +20,7 @@ const events = [
     time: "02:00 PM",
     date: "Today",
     type: "review",
-    attendees: 3
+    attendees: 3,
   },
   {
     id: 3,
@@ -26,7 +28,7 @@ const events = [
     time: "11:00 AM",
     date: "Tomorrow",
     type: "call",
-    attendees: 2
+    attendees: 2,
   },
   {
     id: 4,
@@ -34,23 +36,23 @@ const events = [
     time: "All Day",
     date: "Mar 15",
     type: "deadline",
-    attendees: 8
+    attendees: 8,
   },
-]
+];
 
 const upcomingEvents = [
   { title: "Weekly Standup", time: "10:00 AM", type: "meeting" },
   { title: "Code Review", time: "03:00 PM", type: "review" },
   { title: "Client Presentation", time: "04:30 PM", type: "presentation" },
-]
+];
 
 export default function Calendar() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Calendar</h1>
-          <p className="text-gray-600 mt-2">Manage your schedule and upcoming events.</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Calendar</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Manage your schedule and upcoming events.</p>
         </div>
         <Button className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
@@ -62,7 +64,7 @@ export default function Calendar() {
         <div className="md:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
                 <CalendarIcon className="h-5 w-5" />
                 March 2024
               </CardTitle>
@@ -70,7 +72,7 @@ export default function Calendar() {
             <CardContent>
               <div className="grid grid-cols-7 gap-2 mb-4">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                  <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                  <div key={day} className="text-center text-sm font-medium text-gray-500 dark:text-gray-400 py-2">
                     {day}
                   </div>
                 ))}
@@ -81,20 +83,20 @@ export default function Calendar() {
                   const isCurrentMonth = day > 0 && day <= 31;
                   const isToday = day === 14;
                   const hasEvent = [5, 8, 14, 22, 28].includes(day);
-                  
+
                   return (
                     <div
                       key={i}
                       className={`
                         h-10 flex items-center justify-center text-sm cursor-pointer rounded-md
-                        ${isCurrentMonth ? 'text-gray-900 hover:bg-gray-100' : 'text-gray-300'}
-                        ${isToday ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}
-                        ${hasEvent && !isToday ? 'bg-blue-100 text-blue-600' : ''}
+                        ${isCurrentMonth ? 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700' : 'text-gray-300 dark:text-gray-600'}
+                        ${isToday ? 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600' : ''}
+                        ${hasEvent && !isToday ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300' : ''}
                       `}
                     >
                       {isCurrentMonth ? day : ''}
                     </div>
-                  )
+                  );
                 })}
               </div>
             </CardContent>
@@ -104,7 +106,7 @@ export default function Calendar() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
                 <Clock className="h-5 w-5" />
                 Today's Schedule
               </CardTitle>
@@ -112,11 +114,14 @@ export default function Calendar() {
             <CardContent>
               <div className="space-y-3">
                 {upcomingEvents.map((event, index) => (
-                  <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                    <div className="w-2 h-2 rounded-full bg-blue-600"></div>
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900"
+                  >
+                    <div className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-500"></div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900 text-sm">{event.title}</p>
-                      <p className="text-xs text-gray-500">{event.time}</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">{event.title}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{event.time}</p>
                     </div>
                   </div>
                 ))}
@@ -126,17 +131,17 @@ export default function Calendar() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle className="text-gray-900 dark:text-gray-100">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600">
                   Schedule Meeting
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600">
                   Block Time
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600">
                   View All Events
                 </Button>
               </div>
@@ -147,29 +152,39 @@ export default function Calendar() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Upcoming Events</CardTitle>
+          <CardTitle className="text-gray-900 dark:text-gray-100">Upcoming Events</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {events.map((event) => (
-              <div key={event.id} className="flex items-center justify-between py-3 border-b last:border-b-0">
+              <div
+                key={event.id}
+                className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700 last:border-b-0"
+              >
                 <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <CalendarIcon className="h-5 w-5 text-blue-600" />
+                  <div className="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                    <CalendarIcon className="h-5 w-5 text-blue-600 dark:text-blue-300" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">{event.title}</h3>
-                    <p className="text-sm text-gray-500">{event.date} at {event.time}</p>
+                    <h3 className="font-medium text-gray-900 dark:text-gray-100">{event.title}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{event.date} at {event.time}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Badge variant="secondary">
+                  <Badge variant="secondary" className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                     {event.attendees} attendees
                   </Badge>
-                  <Badge variant={
-                    event.type === 'meeting' ? 'default' :
-                    event.type === 'deadline' ? 'destructive' : 'secondary'
-                  }>
+                  <Badge
+                    variant={
+                      event.type === 'meeting' ? 'default' :
+                      event.type === 'deadline' ? 'destructive' : 'secondary'
+                    }
+                    className={`
+                      ${event.type === 'meeting' ? 'bg-blue-600 dark:bg-blue-500 text-white' : ''}
+                      ${event.type === 'deadline' ? 'bg-red-600 dark:bg-red-500 text-white' : ''}
+                      ${event.type !== 'meeting' && event.type !== 'deadline' ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100' : ''}
+                    `}
+                  >
                     {event.type}
                   </Badge>
                 </div>
@@ -179,5 +194,5 @@ export default function Calendar() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

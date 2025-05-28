@@ -1,12 +1,12 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { StatCard } from "@/components/StatCard"
-import { Users, DollarSign, ShoppingCart, TrendingUp, Activity } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatCard } from "@/components/StatCard";
+import { Users, DollarSign, ShoppingCart, TrendingUp, Activity } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell
-} from "recharts"
+} from "recharts";
 
 const stats = [
   {
@@ -14,7 +14,7 @@ const stats = [
     value: "2,350",
     change: "+12% from last month",
     changeType: "positive" as const,
-    icon: Users, // Pass the component, not JSX
+    icon: Users,
   },
   {
     title: "Revenue",
@@ -37,7 +37,7 @@ const stats = [
     changeType: "positive" as const,
     icon: TrendingUp,
   },
-]
+];
 
 const monthlyData = [
   { name: "Jan", value: 4000 },
@@ -46,7 +46,7 @@ const monthlyData = [
   { name: "Apr", value: 4500 },
   { name: "May", value: 6000 },
   { name: "Jun", value: 5500 },
-]
+];
 
 const dailyData = [
   { name: "Mon", users: 120, orders: 80 },
@@ -56,27 +56,28 @@ const dailyData = [
   { name: "Fri", users: 200, orders: 140 },
   { name: "Sat", users: 190, orders: 130 },
   { name: "Sun", users: 170, orders: 115 },
-]
+];
 
 const pieData = [
   { name: "Desktop", value: 45, color: "#3B82F6" },
   { name: "Mobile", value: 35, color: "#10B981" },
   { name: "Tablet", value: 20, color: "#F59E0B" },
-]
+];
 
 const colorClassMap: Record<string, string> = {
-  Desktop: "bg-blue-500",
-  Mobile: "bg-green-500",
-  Tablet: "bg-yellow-500",
-}
-
+  Desktop: "bg-blue-500 dark:bg-blue-400",
+  Mobile: "bg-green-500 dark:bg-green-400",
+  Tablet: "bg-yellow-500 dark:bg-yellow-400",
+};
 
 export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-2">Welcome back! Here's what's happening with your business today.</p>
+        <h1 className="text-3xl font-bold">Dashboard Overview</h1>
+        <p className="mt-2">
+          Welcome back! Here's what's happening with your business today.
+        </p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -96,11 +97,19 @@ export default function Dashboard() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={monthlyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#3B82F6" />
+                <CartesianGrid stroke="#ccc" strokeDasharray="3 3" className="dark:stroke-gray-600" />
+                <XAxis dataKey="name" stroke="#4B5563" className="dark:stroke-gray-400" />
+                <YAxis stroke="#4B5563" className="dark:stroke-gray-400" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    color: '#1F2937',
+                  }}
+                  wrapperClassName="dark:[&_.recharts-tooltip-wrapper]:bg-gray-800 dark:[&_.recharts-tooltip-wrapper]:text-gray-100 dark:[&_.recharts-tooltip-wrapper]:border-gray-600"
+                />
+                <Bar dataKey="value" fill="#3B82F6" className="dark:fill-blue-400" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -108,17 +117,25 @@ export default function Dashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>User Activity</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-gray-100">User Activity</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={dailyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="users" stroke="#3B82F6" strokeWidth={2} />
-                <Line type="monotone" dataKey="orders" stroke="#10B981" strokeWidth={2} />
+                <CartesianGrid stroke="#ccc" strokeDasharray="3 3" className="dark:stroke-gray-600" />
+                <XAxis dataKey="name" stroke="#4B5563" className="dark:stroke-gray-400" />
+                <YAxis stroke="#4B5563" className="dark:stroke-gray-400" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    color: '#1F2937',
+                  }}
+                  wrapperClassName="dark:[&_.recharts-tooltip-wrapper]:bg-gray-800 dark:[&_.recharts-tooltip-wrapper]:text-gray-100 dark:[&_.recharts-tooltip-wrapper]:border-gray-600"
+                />
+                <Line type="monotone" dataKey="users" stroke="#3B82F6" strokeWidth={2} className="dark:stroke-blue-400" />
+                <Line type="monotone" dataKey="orders" stroke="#10B981" strokeWidth={2} className="dark:stroke-green-400" />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -128,7 +145,7 @@ export default function Dashboard() {
       <div className="grid gap-6 md:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle>Device Usage</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-gray-100">Device Usage</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={200}>
@@ -142,18 +159,29 @@ export default function Dashboard() {
                   dataKey="value"
                 >
                   {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.color}
+                      className={`dark:fill-${entry.color.replace('#', '')[0] === '3' ? 'blue-400' : entry.color.replace('#', '')[0] === '1' ? 'green-400' : 'yellow-400'}`}
+                    />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    color: '#1F2937',
+                  }}
+                  wrapperClassName="dark:[&_.recharts-tooltip-wrapper]:bg-gray-800 dark:[&_.recharts-tooltip-wrapper]:text-gray-100 dark:[&_.recharts-tooltip-wrapper]:border-gray-600"
+                />
               </PieChart>
             </ResponsiveContainer>
             <div className="flex justify-center gap-4 mt-4">
               {pieData.map((item) => (
                 <div key={item.name} className="flex items-center gap-2">
-                  {/* <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div> */}
-                  <div className={`w-3 h-3 rounded-full ${colorClassMap[item.name]}`}></div>
-                  <span className="text-sm text-gray-600">{item.name}</span>
+                  <div className={`w-3 h-3 rounded-full ${colorClassMap[item.name]}`} />
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{item.name}</span>
                 </div>
               ))}
             </div>
@@ -173,12 +201,15 @@ export default function Dashboard() {
                 { action: "User updated profile", time: "15 minutes ago", user: "sarah@example.com" },
                 { action: "New support ticket", time: "20 minutes ago", user: "Ticket #567" },
               ].map((activity, index) => (
-                <div key={index} className="flex items-center justify-between py-2 border-b last:border-b-0">
+                <div
+                  key={index}
+                  className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700 "
+                >
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                    <p className="text-xs text-gray-500">{activity.user}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{activity.action}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{activity.user}</p>
                   </div>
-                  <span className="text-xs text-gray-400">{activity.time}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">{activity.time}</span>
                 </div>
               ))}
             </div>
@@ -186,5 +217,5 @@ export default function Dashboard() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

@@ -123,7 +123,7 @@ export default function DashboardSidebar({
           <HoverCard>
             <HoverCardTrigger asChild>
               <SidebarMenuButton className="flex items-center gap-2 px-3  rounded-lg hover:bg-gray-100 transition-all w-full">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-green-300 via-blue-500 to-purple-600 flex items-center justify-center shadow-md">
+                <div className="h-10 w-10 rounded-full flex items-center justify-center shadow-md">
                   <User2 className="h-5 w-5 text-gray-700" />
                 </div>
                 <span className="text-sm font-medium">{email || 'User'}</span>
