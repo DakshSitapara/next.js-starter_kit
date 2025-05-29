@@ -2,10 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Separator } from '@/components/ui/separator';
 import { User, Bell, Palette } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
@@ -20,7 +18,6 @@ export default function SettingsPage() {
   const [user, setUser] = useState('');
   const router = useRouter();
   
-
 useEffect(() => {
   const savedNotifications = localStorage.getItem('notifications');
   if (savedNotifications !== null) {
@@ -196,7 +193,9 @@ const toggleTheme = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start"
+                onClick={() =>{router.push('/forgot-password')}}
+                >
                   Reset Password
                 </Button>
                 <Button variant="outline" className="w-full justify-start"
