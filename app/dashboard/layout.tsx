@@ -15,7 +15,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [activeItem, setActiveItem] = useState('Home');
-  const { theme, setTheme } = useTheme();
+  // const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const routeMap: { [key: string]: string } = {
@@ -30,9 +30,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setActiveItem(currentItem);
   }, [pathname]);
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
+  // const toggleTheme = () => {
+  //   setTheme(theme === 'dark' ? 'light' : 'dark');
+  // };
 
   return (
     <SidebarProvider>
@@ -49,11 +49,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Breadcrumb>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={toggleTheme}>
+            {/* <Button variant="ghost" size="icon" onClick={toggleTheme}>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
               <span className="sr-only">Toggle theme</span>
-            </Button>
+            </Button> */}
           </div>
         </header>
             <ScrollArea className="h-168 w-full scrollbar-hidden">

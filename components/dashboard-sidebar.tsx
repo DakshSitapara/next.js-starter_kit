@@ -47,6 +47,7 @@ export default function DashboardSidebar({
   setActiveItem: (item: string) => void;
 }) {
   const [email, setEmail] = useState<string | null>(null);
+  const [user, setUser] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -55,6 +56,7 @@ export default function DashboardSidebar({
     if (user) {
       const parsed = JSON.parse(user);
       setEmail(parsed.email);
+      setUser(parsed.user);
     }
   }, []);
 
@@ -131,7 +133,7 @@ export default function DashboardSidebar({
             </HoverCardTrigger>
             <HoverCardContent className="bg-white dark:bg-zinc-900 p-4 rounded-md shadow-md space-y-1 w-56">
               <div className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 px-3 py-2 rounded-md">
-                Account
+                {user}
               </div>
               <div
                 className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 px-3 py-2 rounded-md"

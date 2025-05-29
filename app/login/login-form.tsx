@@ -6,11 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
+import {Eye,EyeClosed} from 'lucide-react';
 
-// Simple hash function for client-side (not secure for production)
+// Simple hash function (for demo only, NOT secure for production)
 const simpleHash = (str: string) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -31,35 +33,34 @@ const LoginForm = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors({});
     setIsLoading(true);
 
     try {
-      // Validate form data
       loginSchema.parse(formData);
 
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]') as { email: string; password: string }[];
+      const users = JSON.parse(localStorage.getItem('users') || '[]') as {
+        email: string;
+        password: string;
+      }[];
+
       const user = users.find((u) => u.email === formData.email);
 
       if (!user) {
         throw new Error('Email not found');
       }
 
-      // Check password
       if (user.password !== simpleHash(formData.password)) {
         throw new Error('Invalid password');
       }
 
-      // Store logged-in user
-      localStorage.setItem('currentUser', JSON.stringify({ email: formData.email }));
-      console.log('Login successful');
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      toast.success('Login successful');
       router.push('/dashboard');
-      toast.success('Login successfully');
-
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
@@ -68,16 +69,18 @@ const LoginForm = () => {
           password: fieldErrors.password?.[0],
         });
       } else {
-        setErrors({ general: error instanceof Error ? error.message : 'An unexpected error occurred' });
+        const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+        setErrors({ general: message });
+        toast.error(message);
       }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [formData, router]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+  }, [formData]);
 
   return (
     <div className={cn('flex flex-col gap-6 items-center justify-center')}>
@@ -88,7 +91,11 @@ const LoginForm = () => {
         <CardContent>
           <form onSubmit={handleSubmit} noValidate>
             <div className="grid gap-6">
-              {errors.general && <p className="text-red-500 text-sm text-center">{errors.general}</p>}
+              {errors.general && (
+                <p className="text-red-500 text-sm text-center">{errors.general}</p>
+              )}
+
+              {/* Email Field */}
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -98,6 +105,7 @@ const LoginForm = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  autoComplete="email"
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? 'email-error' : undefined}
                   className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none"
@@ -107,31 +115,44 @@ const LoginForm = () => {
                   <p id="email-error" className="text-red-500 text-sm">{errors.email}</p>
                 )}
               </div>
-              <div className="grid gap-3">
+
+              {/* Password Field */}
+              <div className="grid gap-3 relative">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
+                  <Link
                     href="/forgot-password"
                     className="ml-auto text-sm underline-offset-4 hover:underline text-blue-600 dark:text-blue-600"
                   >
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  autoComplete="current-password"
                   aria-invalid={!!errors.password}
                   aria-describedby={errors.password ? 'password-error' : undefined}
-                  className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none"
+                  className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none pr-14"
                   data-testid="password-input"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-10.5 text-black hover:underline"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
+                </button>
                 {errors.password && (
                   <p id="password-error" className="text-red-500 text-sm">{errors.password}</p>
                 )}
               </div>
+
+              {/* Submit Button */}
               <Button
                 type="submit"
                 disabled={isLoading}
@@ -141,18 +162,22 @@ const LoginForm = () => {
                 {isLoading ? 'Logging in...' : 'Login'}
               </Button>
             </div>
+
+            {/* Register Redirect */}
             <div className="text-center text-sm mt-4">
               Don&apos;t have an account?{' '}
-              <a
-                href="/registr"
+              <Link
+                href="/register"
                 className="text-sm underline-offset-4 hover:underline text-blue-600 dark:text-blue-600"
               >
                 Register here
-              </a>
+              </Link>
             </div>
           </form>
         </CardContent>
       </Card>
+
+      {/* Terms Notice */}
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         By clicking continue, you agree to our{' '}
         <a href="#" className="text-blue-600 dark:text-blue-600">

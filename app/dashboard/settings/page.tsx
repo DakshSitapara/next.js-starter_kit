@@ -6,31 +6,35 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
-import { Settings, User, Bell, Palette } from 'lucide-react';
+import { User, Bell, Palette } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const [notifications, setNotifications] = useState(true);
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [user, setUser] = useState('');
+  const router = useRouter();
+  
 
-  // Load settings from localStorage on mount
-  useEffect(() => {
-    const savedNotifications = localStorage.getItem('notifications');
-    if (savedNotifications !== null) {
-      setNotifications(JSON.parse(savedNotifications));
-    }
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-      const user = JSON.parse(currentUser);
-      setName(user.name || '');
-      setEmail(user.email || '');
-    }
-  }, []);
+useEffect(() => {
+  const savedNotifications = localStorage.getItem('notifications');
+  if (savedNotifications !== null) {
+    setNotifications(JSON.parse(savedNotifications));
+  }
+
+  const currentUser = localStorage.getItem('currentUser');
+  if (currentUser) {
+    const user = JSON.parse(currentUser);
+    setEmail(user.email || '');
+    setPassword(user.password || '');
+    setUser(user.user || '');
+  }
+}, []);
 
   useEffect(() => {
     localStorage.setItem('notifications', JSON.stringify(notifications));
@@ -51,6 +55,12 @@ export default function SettingsPage() {
       toast.error('No user logged in.');
     }
   };
+
+const toggleTheme = () => {
+  const newTheme = theme === 'dark' ? 'light' : 'dark';
+  setTheme(newTheme);
+  toast.success(`Switched to ${newTheme} mode`);
+};
 
   return (
     <div className="space-y-6">
@@ -75,16 +85,13 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {/* <div className="grid gap-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="Daksh Sitapara"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div> */}
                 <div className="grid gap-2">
+                  <Label htmlFor="name">User</Label>
+                   <p className="border rounded px-3 py-2 ">
+                    {user}
+                  </p>
+                </div>
+                {/* <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
@@ -93,8 +100,15 @@ export default function SettingsPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                </div>
+                </div> */}
                 <div className="grid gap-2">
+                  <Label htmlFor='email'>Email</Label>
+                  <p className="border rounded px-3 py-2 ">
+                    {email}
+                  </p>
+                </div>
+
+                {/* <div className="grid gap-2">
                   <Label htmlFor="password">New Password</Label>
                   <Input
                     id="password"
@@ -103,7 +117,14 @@ export default function SettingsPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                </div>
+                </div> */}
+                {/* <div className="grid gap-2">
+                  <Label>Password</Label>
+                  <p className="border rounded px-3 py-2 bg-gray-100 dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-200">
+                      ••••••••                 
+                  </p>
+                </div> */}
+
               </div>
             </CardContent>
           </Card>
@@ -160,9 +181,10 @@ export default function SettingsPage() {
                   <Switch
                     id="dark-mode"
                     checked={theme === 'dark'}
-                    onCheckedChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                    onCheckedChange={toggleTheme}
                   />
-                  <span className="sr-only">Toggle dark mode</span>
+                  <span className="sr-only">Toggle theme</span>
+
                 </div>
               </div>
             </CardContent>
@@ -177,11 +199,14 @@ export default function SettingsPage() {
                 <Button variant="outline" className="w-full justify-start">
                   Reset Password
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  Export Data
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  Delete Account
+                <Button variant="outline" className="w-full justify-start"
+                  onClick={() => {
+                  localStorage.removeItem('currentUser');
+                  toast.success('Logout successfully!');
+                  router.push('/login');
+                }}
+                >
+                  Log Out
                 </Button>
               </div>
             </CardContent>
