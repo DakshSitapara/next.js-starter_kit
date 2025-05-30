@@ -147,3 +147,7 @@ input[type="button"],
 .scrollbar-none {
   -ms-overflow-style: none; /* IE and Edge */
 }
+
+.animate-gradient-x {
+  will-change: background-position;
+}

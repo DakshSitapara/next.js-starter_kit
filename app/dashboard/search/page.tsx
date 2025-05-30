@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import { Search, User, Mail, FileText } from 'lucide-react';
 
 const searchResults = [
@@ -47,7 +46,7 @@ const filters = [
 
 export default function SearchPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6"> 
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Search</h1>

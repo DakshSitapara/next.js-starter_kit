@@ -33,7 +33,7 @@
 import { ArrowRight, Github, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 export default function HeroSection() {
   return (
@@ -95,8 +95,8 @@ export default function HeroSection() {
               size="lg"
               className="bg-blue-600 hover:bg-blue-500 text-white rounded-full px-8 h-12"
             >
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4" />
+              Get Started 
+           <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
           <Link
@@ -105,7 +105,7 @@ export default function HeroSection() {
             className="flex items-center gap-2 rounded-full px-6 py-2 h-12 border-2 text-gray-300 data:text-gray-300: bg-gray-950 hover:bg-gray-800 dark:hover:bg-gray-800 transition-colors"
             aria-label="View on GitHub"
           >
-            <Github className="w-5 h-5 bg-transparent" aria-hidden="true" />
+            <Github className="w-5 h-5 bg-transparent" aria-label="GitHub icon" />
             <span>Star on GitHub</span>
           </Link>
         </motion.div>

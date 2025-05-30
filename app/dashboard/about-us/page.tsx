@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { MessageCircleQuestion, Mail, Github, Twitter } from 'lucide-react';
+import Link from 'next/link'
 
 const teamMembers = [
   {
@@ -24,10 +25,11 @@ const teamMembers = [
 ];
 
 export default function AboutUsPage() {
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-                <div>
+        <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">About Us</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Learn more about our app and the team behind it.
@@ -45,17 +47,20 @@ export default function AboutUsPage() {
               <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Contact Us</h4>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-gray-500" />
-                <a
+                <Link
                   href="mailto:dakshsitapara6@gmail.com"
+                  target="_blank"
                   className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
                 >
                   dakshsitapara6@gmail.com
-                </a>
+                </Link>
               </div>
               <div className="flex items-center gap-2">
                 <Github className="h-4 w-4 text-gray-500" />
                 <a
                   href="http://github.com/DakshSitapara"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
                 >
                   GitHub
@@ -65,6 +70,8 @@ export default function AboutUsPage() {
                 <Twitter className="h-4 w-4 text-gray-500" />
                 <a
                   href="https://x.com/home"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
                 >
                   Twitter
