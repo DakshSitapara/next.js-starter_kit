@@ -55,8 +55,23 @@ export default function AddEventDialog({ isOpen, setIsOpen, setEvents }: AddEven
     setIsOpen(false)
   }
 
+    const handleClose = () => {
+    setNewEvent({
+      id: '',
+      title: '',
+      description: '',
+      date: '',
+      time: '09:00',
+      duration: '1 hour',
+      location: '',
+      attendees: 1,
+      type: 'meeting',
+    })
+    setIsOpen(false)
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center">Add New Event</DialogTitle>

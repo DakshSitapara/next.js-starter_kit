@@ -28,6 +28,15 @@ export default function SearchDialog({
   const [dateFilter, setDateFilter] = useState('')
   const [typeFilter, setTypeFilter] = useState('all')
 
+    const handleDialogChange = (open: boolean) => {
+    setIsOpen(open)
+    if (!open) {
+      setSearchQuery('')
+      setDateFilter('')
+      setTypeFilter('all')
+    }
+  }
+
   const filteredEvents = events.filter(event => {
     const matchesQuery =
       searchQuery === '' ||
@@ -48,103 +57,119 @@ export default function SearchDialog({
     }
   }
 
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle className="text-center">Search Events</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div className="flex gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-              <Input
-                type="text"
-                placeholder="Search by title or description..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8"
-                autoFocus
-              />
-            </div>
-            <div className="w-40">
-              <Input
-                type="date"
-                value={dateFilter}
-                onChange={(e) => setDateFilter(e.target.value)}
-                placeholder="Filter by date"
-              />
-            </div>
-            <div className="w-40">
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Filter by type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="meeting">Meeting</SelectItem>
-                  <SelectItem value="deadline">Deadline</SelectItem>
-                  <SelectItem value="reminder">Reminder</SelectItem>
-                  <SelectItem value="personal">Personal</SelectItem>
-                </SelectContent>
-              </Select>
+ return (
+  <Dialog open={isOpen} onOpenChange={handleDialogChange}>
+    <DialogContent className="max-w-2xl">
+      <DialogHeader>
+        <DialogTitle className="text-center">Search Events</DialogTitle>
+      </DialogHeader>
+
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2">
+          {/* Search Input */}
+          <div className="relative flex-1">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+            <Input
+              type="text"
+              placeholder="Search by title"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 w-full"
+              autoFocus
+              aria-label="Search events"
+            />
+          </div>
+
+          {/* Date Filter */}
+          <div className="sm:w-35 w-full">
+            <Input
+              type="date"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              placeholder="Filter by date"
+              className="w-full"
+            />
+          </div>
+
+          {/* Type Filter */}
+          <div className="sm:w-30 w-full">
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger className=" w-full">
+                <SelectValue placeholder="Filter by type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="meeting">Meeting</SelectItem>
+                <SelectItem value="deadline">Deadline</SelectItem>
+                <SelectItem value="reminder">Reminder</SelectItem>
+                <SelectItem value="personal">Personal</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Events card */}
+<Card>
+  <CardContent className=" h-[250px] overflow-y-auto custom-scroll">
+    <div className="space-y-4">
+      {filteredEvents.length === 0 && (
+        <p className="text-gray-500 dark:text-gray-400 text-sm text-center">
+          No events match your search criteria.
+        </p>
+      )}
+      {filteredEvents
+        .sort(
+          (a, b) =>
+            new Date(a.date + ' ' + a.time).getTime() -
+            new Date(b.date + ' ' + b.time).getTime()
+        )
+        .map((event) => (
+          <div
+            key={event.id}
+            className="p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+            onClick={() => {
+              setSelectedEvent(event);
+              setIsViewEventOpen(true);
+              setIsOpen(false);
+            }}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h4 className="font-medium text-gray-900 dark:text-gray-100">
+                  {event.title}
+                </h4>
+                <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  <span className="flex items-center gap-1">
+                    <CalendarIcon className="h-3 w-3" />
+                    {event.date}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    {event.time}
+                  </span>
+                </div>
+                {event.location && (
+                  <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <MapPin className="h-3 w-3" />
+                    {event.location}
+                  </div>
+                )}
+                {event.attendees > 1 && (
+                  <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <Users className="h-3 w-3" />
+                    {event.attendees} attendees
+                  </div>
+                )}
+              </div>
+              <Badge className={getEventTypeColor(event.type)}>{event.type}</Badge>
             </div>
           </div>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {filteredEvents.length === 0 && (
-                  <p className="text-gray-500 dark:text-gray-400 text-sm text-center">
-                    No events match your search criteria.
-                  </p>
-                )}
-                {filteredEvents
-                  .sort((a, b) => new Date(a.date + ' ' + a.time).getTime() - new Date(b.date + ' ' + b.time).getTime())
-                  .map(event => (
-                    <div
-                      key={event.id}
-                      className="p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
-                      onClick={() => {
-                        setSelectedEvent(event)
-                        setIsViewEventOpen(true)
-                        setIsOpen(false)
-                      }}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-900 dark:text-gray-100">{event.title}</h4>
-                          <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                            <span className="flex items-center gap-1">
-                              <CalendarIcon className="h-3 w-3" />
-                              {event.date}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {event.time}
-                            </span>
-                          </div>
-                          {event.location && (
-                            <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                              <MapPin className="h-3 w-3" />
-                              {event.location}
-                            </div>
-                          )}
-                          {event.attendees > 1 && (
-                            <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                              <Users className="h-3 w-3" />
-                              {event.attendees} attendees
-                            </div>
-                          )}
-                        </div>
-                        <Badge className={getEventTypeColor(event.type)}>{event.type}</Badge>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
+        ))}
+    </div>
+  </CardContent>
+</Card>
+      </div>
+    </DialogContent>
+  </Dialog>
+);
 }

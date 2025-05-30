@@ -7,8 +7,9 @@ import AddEventDialog from './AddEventDialog'
 import EditEventDialog from './EditEventDialog'
 import ViewEventDialog from './ViewEventDialog'
 import DeleteConfirmDialog from './DeleteConfirmDialog'
+import SearchDialog from './SearchDialog'
 import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 
 export interface Event {
   id: string
@@ -28,6 +29,7 @@ export default function CalendarPage() {
   const [isEditEventOpen, setIsEditEventOpen] = useState(false)
   const [isViewEventOpen, setIsViewEventOpen] = useState(false)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 
   const [events, setEvents] = useState<Event[]>(() => {
@@ -42,6 +44,17 @@ export default function CalendarPage() {
     localStorage.setItem('calendarEvents', JSON.stringify(events))
   }, [events])
 
+useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key === 'k') {
+      e.preventDefault()
+      setIsSearchOpen(true)
+    }
+  }
+  window.addEventListener('keydown', handleKeyDown)
+  return () => window.removeEventListener('keydown', handleKeyDown)
+}, [])
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -49,10 +62,16 @@ export default function CalendarPage() {
           <h1 className="text-3xl font-bold flex items-center gap-3">Calendar</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Manage your schedule and upcoming events.</p>
         </div>
-        <Button onClick={() => setIsAddEventOpen(true)} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Add Event
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" className='text-wrap text-gray-500'  onClick={() => setIsSearchOpen(true)}>
+                Search Event here..
+              <Search className="h-4 w-4" />
+          </Button>
+          <Button onClick={() => setIsAddEventOpen(true)} className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Add Event
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -104,6 +123,14 @@ export default function CalendarPage() {
         selectedEvent={selectedEvent}
         setSelectedEvent={setSelectedEvent}
         setEvents={setEvents}
+        setIsViewEventOpen={setIsViewEventOpen}
+      />
+      
+      <SearchDialog
+        isOpen={isSearchOpen}
+        setIsOpen={setIsSearchOpen}
+        events={events}
+        setSelectedEvent={setSelectedEvent}
         setIsViewEventOpen={setIsViewEventOpen}
       />
     </div>
