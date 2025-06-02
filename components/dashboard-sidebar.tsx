@@ -67,7 +67,7 @@ export default function DashboardSidebar({
   }, [pathname, activeItem, setActiveItem]);
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarContent className="flex flex-col h-full justify-between">
         <div>
           <SidebarGroup>
