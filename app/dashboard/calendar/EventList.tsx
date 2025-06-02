@@ -36,7 +36,7 @@ export default function EventList({ events, setIsViewEventOpen, setSelectedEvent
             .map(event => (
               <div
                 key={event.id}
-                className="p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                className="p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-transform cursor-pointer hover:scale-105"
                 onClick={() => {
                   setSelectedEvent(event)
                   setIsViewEventOpen(true)

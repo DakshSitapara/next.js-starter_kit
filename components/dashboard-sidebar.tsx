@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -10,7 +11,6 @@ import {
   Home,
   Inbox,
   MessageCircleQuestion,
-  Search,
   Settings,
   User2,
 } from 'lucide-react';
@@ -34,7 +34,6 @@ const items = [
   { title: 'Home', url: '/dashboard/home', icon: Home },
   { title: 'Inbox', url: '/dashboard/inbox', icon: Inbox },
   { title: 'Calendar', url: '/dashboard/calendar', icon: Calendar },
-  // { title: 'Search', url: '/dashboard/search', icon: Search },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
   { title: 'About Us', url: '/dashboard/about-us', icon: MessageCircleQuestion },
 ];
@@ -71,64 +70,63 @@ export default function DashboardSidebar({
     <Sidebar>
       <SidebarContent className="flex flex-col h-full justify-between">
         <div>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-2xl mb-2">Dashboard</SidebarGroupLabel>
-          <SidebarGroupContent className="mt-2">
-            <SidebarMenu className="space-y-1">
-              {items.map((item, index) => {
-                const isActive = activeItem === item.title;
-                return (
-                  <SidebarMenuItem
-                    key={item.title}
-                    className={`animate-stagger-${Math.min(index + 1, 3)}`}
-                  >
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      className="w-full justify-start group relative hover:bg-blue-50 transition-all duration-200"
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-2xl mb-2">Dashboard</SidebarGroupLabel>
+            <SidebarGroupContent className="mt-2">
+              <SidebarMenu className="space-y-1">
+                {items.map((item, index) => {
+                  const isActive = activeItem === item.title;
+                  const Icon = item.icon;
+
+                  return (
+                    <SidebarMenuItem
+                      key={item.title}
+                      className={`animate-stagger-${Math.min(index + 1, 3)}`}
                     >
-                      <Link
-                        href={item.url}
-                        onClick={() => setActiveItem(item.title)}
-                        className="flex items-center gap-3 px-3 py-3 rounded-lg relative overflow-hidden"
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive}
+                        className="w-full justify-start transition-all duration-200"
                       >
-                        {isActive && (
-                          <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full" />
-                        )}
-                        <item.icon
-                          className={`h-5 w-5 transition-colors duration-200 ${
-                            isActive
-                              ? 'text-blue-600'
-                              : 'text-gray-500 hover:text-blue-600'
-                          }`}
-                        />
-                        <span
-                          className={`font-medium transition-colors duration-200 ${
-                            isActive
-                              ? 'text-blue-600'
-                              : 'text-gray-700 hover:text-blue-600'
-                          }`}
+                        <Link
+                          href={item.url}
+                          onClick={() => setActiveItem(item.title)}
+                          className={`group flex items-center gap-3 px-3 py-3 rounded-lg relative overflow-hidden
+                            ${isActive ? 'bg-blue-50' : 'hover:bg-blue-50'}`}
                         >
-                          {item.title}
-                        </span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+                          {isActive && (
+                            <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full" />
+                          )}
+                          <Icon
+                            className={`h-5 w-5 transition-colors duration-200 
+                              ${isActive ? 'text-blue-600' : 'text-gray-500 '}`}
+                          />
+                          <span
+                            className={`font-medium transition-colors duration-200 
+                              ${isActive ? 'text-blue-600' : 'text-gray-700 '}`}
+                          >
+                            {item.title}
+                          </span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
-          </div>
+        </div>
 
         <SidebarGroupContent className="mt-4 border-t pt-4 items-center">
           <HoverCard>
             <HoverCardTrigger asChild>
-              <SidebarMenuButton className="flex items-center gap-2 px-3  rounded-lg hover:bg-gray-100 transition-all w-full">
+              <SidebarMenuButton className="flex items-center gap-2 px-3 rounded-lg transition-all group hover:bg-gray-100">
                 <div className="h-10 w-10 rounded-full flex items-center justify-center shadow-md">
-                  <User2 className="h-5 w-5 text-gray-700" />
+                  <User2 className="h-5 w-5 text-gray-700 transition-colors duration-200 " />
                 </div>
-                <span className="text-sm font-medium">{email || 'User'}</span>
+                <span className="text-sm font-medium transition-colors duration-200 ">
+                  {email || 'User'}
+                </span>
               </SidebarMenuButton>
             </HoverCardTrigger>
             <HoverCardContent className="bg-white dark:bg-zinc-900 p-4 rounded-md shadow-md space-y-1 w-56">

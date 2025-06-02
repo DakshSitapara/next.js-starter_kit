@@ -160,3 +160,11 @@ input[type="button"],
 .custom-scroll {
   -ms-overflow-style: none; /* IE 10+ */
 }
+
+.neumorphic-shadow {
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+}
+
+.neumorphic-inset-shadow {
+  box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+}

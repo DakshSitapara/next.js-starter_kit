@@ -71,10 +71,10 @@ export default function EventCalendar({
             {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
           </CardTitle>
           <div className="flex gap-1">
-            <Button variant="outline" size="sm" onClick={handlePreviousMonth}>
+            <Button className='rounded-full' variant="outline" size="sm" onClick={handlePreviousMonth}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={handleNextMonth}>
+            <Button className='rounded-full' variant="outline" size="sm" onClick={handleNextMonth}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -115,7 +115,7 @@ export default function EventCalendar({
                   {dayEvents.slice(0, 2).map(event => (
                     <div
                       key={event.id}
-                      className="text-xs p-1 rounded truncate bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-700"
+                      className="text-xs p-1 rounded truncate bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-700 hover:scale-105 transition-transform"
                       onClick={(e) => {
                         e.stopPropagation()
                         setSelectedEvent(event)

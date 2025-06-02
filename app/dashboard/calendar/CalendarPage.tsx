@@ -32,17 +32,40 @@ export default function CalendarPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 
-  const [events, setEvents] = useState<Event[]>(() => {
-    if (typeof window !== 'undefined') {
-      const savedEvents = localStorage.getItem('calendarEvents')
-      return savedEvents ? JSON.parse(savedEvents) : []
-    }
-    return []
-  })
+  // const [events, setEvents] = useState<Event[]>(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const savedEvents = localStorage.getItem('calendarEvents')
+  //     return savedEvents ? JSON.parse(savedEvents) : []
+  //   }
+  //   return []
+  // })
 
-  useEffect(() => {
-    localStorage.setItem('calendarEvents', JSON.stringify(events))
-  }, [events])
+  // useEffect(() => {
+  //   localStorage.setItem('calendarEvents', JSON.stringify(events))
+  // }, [events])
+
+  const [events, setEvents] = useState<Event[]>(() => {
+  if (typeof window !== 'undefined') {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
+      const storedEventsKey = `calendarEvents_${user.user}`;
+      const storedEvents = localStorage.getItem(storedEventsKey);
+      return storedEvents ? JSON.parse(storedEvents) : [];
+    }
+    return [];
+  }
+  return [];
+});
+
+useEffect(() => {
+  const currentUser = localStorage.getItem('currentUser');
+  if (currentUser) {
+    const user = JSON.parse(currentUser);
+    const storedEventsKey = `calendarEvents_${user.user}`;
+    localStorage.setItem(storedEventsKey, JSON.stringify(events));
+  }
+}, [events]);
 
 useEffect(() => {
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -55,7 +78,7 @@ useEffect(() => {
   return () => window.removeEventListener('keydown', handleKeyDown)
 }, [])
 
-  return (
+  return  (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
@@ -66,6 +89,7 @@ useEffect(() => {
           <Button variant="outline" className='text-wrap text-gray-500'  onClick={() => setIsSearchOpen(true)}>
                 Search Event here..
               <Search className="h-4 w-4" />
+                Ctrl+K
           </Button>
           <Button onClick={() => setIsAddEventOpen(true)} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />

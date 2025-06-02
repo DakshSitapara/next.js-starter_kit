@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import CustomSwitch from '@/components/CustomSwitch';
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
@@ -175,13 +176,11 @@ const toggleTheme = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Switch
-                    id="dark-mode"
-                    checked={theme === 'dark'}
-                    onCheckedChange={toggleTheme}
+                  <CustomSwitch
+                    checked={theme === 'light'}
+                    onChange={toggleTheme}
                   />
                   <span className="sr-only">Toggle theme</span>
-
                 </div>
               </div>
             </CardContent>
