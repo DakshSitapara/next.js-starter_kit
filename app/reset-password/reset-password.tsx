@@ -25,7 +25,7 @@ const schema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-export default function ResetPasswordPage() {
+export default function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
@@ -113,73 +113,69 @@ export default function ResetPasswordPage() {
 
   if (!isValidToken) {
     return (
-      <div className={cn('flex flex-col gap-6 items-center justify-center')}>
-        <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl">Invalid Link</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="mb-4 text-justify-center text-gray-700 dark:text-gray-700">
-              The reset link is invalid or has expired. Please request a new one.
-            </p>
-            <Button
-              onClick={() => router.push('/forgot-password')}
-              className="w-full dark:!bg-black dark:text-white"
-            >
-              Request New Link
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Invalid Link</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-4 text-center text-gray-700 dark:text-gray-700">
+            The reset link is invalid or has expired. Please request a new one.
+          </p>
+          <Button
+            onClick={() => router.push('/forgot-password')}
+            className="w-full dark:!bg-black dark:text-white"
+          >
+            Request New Link
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="flex flex-col gap-6 items-center justify-center">
-      <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Reset Password</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="grid gap-6">
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-            {success && <p className="text-green-500 text-sm text-center">{success}</p>}
+    <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">
+      <CardHeader className="text-center">
+        <CardTitle className="text-xl">Reset Password</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="grid gap-6">
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {success && <p className="text-green-500 text-sm text-center">{success}</p>}
 
-            <div className="grid gap-3">
-              <Label htmlFor="password">New Password</Label>
-              <Input
-                autoFocus
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none"
-              />
-            </div>
+          <div className="grid gap-3">
+            <Label htmlFor="password">New Password</Label>
+            <Input
+              autoFocus
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none"
+            />
+          </div>
 
-            <div className="grid gap-3">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none"
-              />
-            </div>
+          <div className="grid gap-3">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="bg-transparent !text-black !border-gray-300 !placeholder-gray-500 dark:!text-black dark:!border-gray-300 dark:!placeholder-gray-500 !ring-0 !shadow-none !transition-none"
+            />
+          </div>
 
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="w-full dark:!bg-black dark:text-white"
-            >
-              {isLoading ? 'Resetting...' : 'Reset Password'}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full dark:!bg-black dark:text-white"
+          >
+            {isLoading ? 'Resetting...' : 'Reset Password'}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
