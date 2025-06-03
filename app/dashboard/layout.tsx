@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       '/dashboard/home': 'Home',
       '/dashboard/inbox': 'Inbox',
       '/dashboard/calendar': 'Calendar',
-      '/dashboard/search': 'Search',
+      // '/dashboard/search': 'Search',
       '/dashboard/settings': 'Settings',
       '/dashboard/about-us': 'About Us',
     };
@@ -51,13 +51,13 @@ const toggleTheme = () => {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" onClick={toggleTheme}>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
               <span className="sr-only">Toggle theme</span>
             </Button>
-          </div>
+          </div> */}
         </header>
             <ScrollArea className="h-168 w-full scrollbar-hidden">
         <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
