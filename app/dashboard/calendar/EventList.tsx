@@ -11,69 +11,67 @@ interface EventListProps {
 
 export default function EventList({ events, setIsViewEventOpen, setSelectedEvent }: EventListProps) {
   const getEventTypeColor = (type: Event['type']) => {
-  switch (type) {
-    case 'meeting': return 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100'
-    case 'deadline': return 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
-    case 'reminder': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
-    case 'personal': return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
-    default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
+    switch (type) {
+      case 'meeting': return 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100'
+      case 'deadline': return 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+      case 'reminder': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
+      case 'personal': return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
+    }
   }
-}
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-[600px] flex flex-col">
+      <CardHeader className="sticky top-0 bg-white dark:bg-gray-900 z-10">
         <CardTitle className="text-2xl">Upcoming Events</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1 overflow-y-auto custom-scroll">
         <div className="space-y-4">
-          {events.length === 0 && (
+          {events.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-sm">No upcoming events.</p>
-          )}
-          {events
-            .sort((a, b) => new Date(a.date + ' ' + a.time).getTime() - new Date(b.date + ' ' + b.time).getTime())
-            .slice(0, 5)
-            .map(event => (
-              <div
-                key={event.id}
-                className="p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-transform cursor-pointer hover:scale-105"
-                onClick={() => {
-                  setSelectedEvent(event)
-                  setIsViewEventOpen(true)
-                }}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">{event.title}</h4>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <CalendarIcon className="h-3 w-3" />
-                        {event.date}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {event.time}
-                      </span>
+          ) : (
+            events
+              .sort((a, b) => new Date(a.date + ' ' + a.time).getTime() - new Date(b.date + ' ' + b.time).getTime())
+              .map(event => (
+                <div
+                  key={event.id}
+                  className="p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-transform cursor-pointer hover:scale-105"
+                  onClick={() => {
+                    setSelectedEvent(event)
+                    setIsViewEventOpen(true)
+                  }}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900 dark:text-gray-100">{event.title}</h4>
+                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        <span className="flex items-center gap-1">
+                          <CalendarIcon className="h-3 w-3" />
+                          {event.date}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {event.time}
+                        </span>
+                      </div>
+                      {event.location && (
+                        <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          <MapPin className="h-3 w-3" />
+                          {event.location}
+                        </div>
+                      )}
+                      {event.attendees > 1 && (
+                        <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          <Users className="h-3 w-3" />
+                          {event.attendees} attendees
+                        </div>
+                      )}
                     </div>
-                    {event.location && (
-                      <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                        <MapPin className="h-3 w-3" />
-                        {event.location}
-                      </div>
-                    )}
-                    {event.attendees > 1 && (
-                      <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                        <Users className="h-3 w-3" />
-                        {event.attendees} attendees
-                      </div>
-                    )}
+                    <Badge className={getEventTypeColor(event.type)}>{event.type}</Badge>
                   </div>
-                  <Badge className={getEventTypeColor(event.type)}>
-                    {event.type}
-                  </Badge>
                 </div>
-              </div>
-            ))}
+              ))
+          )}
         </div>
       </CardContent>
     </Card>
