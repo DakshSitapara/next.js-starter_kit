@@ -79,8 +79,7 @@ export default function HeroSection() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-lg md:text-xl text-gray-500 dark:text-gray-300 max-w-2xl mx-auto"
         >
-          Launch your SaaS in minutes with our production-ready Next.js starter
-          kit.
+        This is a Demo Next.js starter kit.
         </motion.p> 
 
         {/* CTA Buttons */}

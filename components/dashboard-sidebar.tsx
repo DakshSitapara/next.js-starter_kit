@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -30,13 +29,16 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 
-const items = [
+const allItems = [
   { title: 'Home', url: '/dashboard/home', icon: Home },
   { title: 'Inbox', url: '/dashboard/inbox', icon: Inbox },
   { title: 'Calendar', url: '/dashboard/calendar', icon: Calendar },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
   { title: 'About Us', url: '/dashboard/about-us', icon: MessageCircleQuestion },
 ];
+
+// Define allowed routes for unauthenticated users
+const allowedRoutesForUnauthenticated = ['/dashboard/home', '/dashboard/about-us'];
 
 export default function DashboardSidebar({
   activeItem,
@@ -47,24 +49,42 @@ export default function DashboardSidebar({
 }) {
   const [email, setEmail] = useState<string | null>(null);
   const [user, setUser] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const user = localStorage.getItem('currentUser');
-    if (user) {
-      const parsed = JSON.parse(user);
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      const parsed = JSON.parse(currentUser);
+      setIsAuthenticated(true);
       setEmail(parsed.email);
       setUser(parsed.user);
+    } else {
+      setIsAuthenticated(false);
+      setEmail(null);
+      setUser(null);
     }
   }, []);
 
+  // Filter sidebar items based on authentication status
+  const items = isAuthenticated
+    ? allItems
+    : allItems.filter((item) =>
+        allowedRoutesForUnauthenticated.includes(item.url)
+      );
+
+  // Update active item based on pathname
   useEffect(() => {
     const currentItem = items.find((item) => item.url === pathname);
     if (currentItem && currentItem.title !== activeItem) {
       setActiveItem(currentItem.title);
     }
-  }, [pathname, activeItem, setActiveItem]);
+  }, [pathname, activeItem, setActiveItem, items]);
+
+  if (isAuthenticated === null) {
+    return null;
+  }
 
   return (
     <Sidebar collapsible="icon">
@@ -125,24 +145,35 @@ export default function DashboardSidebar({
                   <User2 className="h-5 w-5 text-gray-700 transition-colors duration-200 " />
                 </div>
                 <span className="text-sm font-medium transition-colors duration-200 ">
-                  {email || 'User'}
+                  {isAuthenticated ? (email || 'User') : 'Guest'}
                 </span>
               </SidebarMenuButton>
             </HoverCardTrigger>
             <HoverCardContent className="bg-white dark:bg-zinc-900 p-4 rounded-md shadow-md space-y-1 w-56">
-              <div className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 px-3 py-2 rounded-md">
-                {user}
-              </div>
-              <div
-                className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 px-3 py-2 rounded-md"
-                onClick={() => {
-                  localStorage.removeItem('currentUser');
-                  toast.success('Logout successfully!');
-                  router.push('/login');
-                }}
-              >
-                Logout
-              </div>
+              {isAuthenticated ? (
+                <>
+                  <div className="px-3 py-2 text-gray-700 dark:text-gray-300">
+                    {user || 'User'}
+                  </div>
+                  <div
+                    className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 px-3 py-2 rounded-md"
+                    onClick={() => {
+                      localStorage.removeItem('currentUser');
+                      toast.success('Logout successfully!');
+                      router.push('/login');
+                    }}
+                  >
+                    Logout
+                  </div>
+                </>
+              ) : (
+                <div
+                  className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 px-3 py-2 rounded-md"
+                  onClick={() => router.push('/login')}
+                >
+                  Login
+                </div>
+              )}
             </HoverCardContent>
           </HoverCard>
         </SidebarGroupContent>

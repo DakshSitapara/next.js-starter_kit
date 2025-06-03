@@ -69,6 +69,7 @@ const ForgotPassword = () => {
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
+                  autoFocus
                   id="email"
                   type="email"
                   value={email}

@@ -105,6 +105,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div className="grid gap-3">
                 <Label htmlFor="user">Name</Label>
                 <Input
+                  autoFocus
                   id="user"
                   type="text"
                   placeholder="Your name"

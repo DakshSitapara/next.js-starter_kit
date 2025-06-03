@@ -110,7 +110,7 @@ export default function SearchDialog({
 
         {/* Events card */}
 <Card>
-  <CardContent className=" h-[250px] overflow-y-auto custom-scroll">
+<CardContent className={`${filteredEvents.length > 3 ? 'h-[250px] overflow-y-auto custom-scroll' : ' h-full overflow-y-auto custom-scroll'}`}>
     <div className="space-y-4">
       {filteredEvents.length === 0 && (
         <p className="text-gray-500 dark:text-gray-400 text-sm text-center">

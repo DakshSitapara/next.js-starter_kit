@@ -148,6 +148,7 @@ export default function ResetPasswordPage() {
             <div className="grid gap-3">
               <Label htmlFor="password">New Password</Label>
               <Input
+                autoFocus
                 id="password"
                 type="password"
                 value={password}

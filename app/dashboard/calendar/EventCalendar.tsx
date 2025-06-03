@@ -12,6 +12,16 @@ interface EventCalendarProps {
   setSelectedEvent: (event: Event | null) => void
 }
 
+const getEventTypeColor = (type: Event['type']) => {
+  switch (type) {
+    case 'meeting': return 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100'
+    case 'deadline': return 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+    case 'reminder': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
+    case 'personal': return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+    default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
+  }
+}
+
 export default function EventCalendar({
   currentDate,
   setCurrentDate,
@@ -93,7 +103,6 @@ export default function EventCalendar({
             if (day === null) {
               return <div key={index} className="p-2 h-24"></div>
             }
-
             const dateString = formatDateForInput(currentDate.getFullYear(), currentDate.getMonth(), day)
             const dayEvents = getEventsForDate(dateString)
             const isToday = dateString === todayString
@@ -111,11 +120,12 @@ export default function EventCalendar({
                 <div className={`text-sm font-medium ${isToday ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-gray-100'}`}>
                   {day}
                 </div>
-                <div className="mt-1 space-y-1">
-                  {dayEvents.slice(0, 2).map(event => (
+                <div className="mt-1 max-h-15 overflow-y-auto space-y-1 pr-1 custom-scroll">
+                  {dayEvents.map((event) => (
                     <div
                       key={event.id}
-                      className="text-xs p-1 rounded truncate bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-700 hover:scale-105 transition-transform"
+                      title={event.title}
+                      className={`text-[10px] px-1 py-0.5 rounded cursor-pointer truncate hover:scale-105 transition-all ${getEventTypeColor(event.type)}`}
                       onClick={(e) => {
                         e.stopPropagation()
                         setSelectedEvent(event)
@@ -125,11 +135,6 @@ export default function EventCalendar({
                       {event.title}
                     </div>
                   ))}
-                  {dayEvents.length > 2 && (
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      +{dayEvents.length - 2} more
-                    </div>
-                  )}
                 </div>
               </div>
             )
