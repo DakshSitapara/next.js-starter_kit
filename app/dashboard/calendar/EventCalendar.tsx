@@ -10,6 +10,7 @@ interface EventCalendarProps {
   setIsAddEventOpen: (isOpen: boolean) => void
   setIsViewEventOpen: (isOpen: boolean) => void
   setSelectedEvent: (event: Event | null) => void
+  setSelectedDate: (date: string) => void // <-- Add this prop
 }
 
 const getEventTypeColor = (type: Event['type']) => {
@@ -29,6 +30,7 @@ export default function EventCalendar({
   setIsAddEventOpen,
   setIsViewEventOpen,
   setSelectedEvent,
+  setSelectedDate, // <-- Add this line
 }: EventCalendarProps) {
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -114,7 +116,8 @@ export default function EventCalendar({
                   isToday ? 'bg-blue-50 dark:bg-blue-900 border-blue-200 dark:border-blue-700' : 'border-gray-200 dark:border-gray-700'
                 }`}
                 onClick={() => {
-                  setIsAddEventOpen(true)
+                  setSelectedDate(dateString) // <-- Set the selected date
+                  setIsAddEventOpen(true)     // <-- Open the Add Event dialog
                 }}
               >
                 <div className={`text-sm font-medium ${isToday ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-gray-100'}`}>

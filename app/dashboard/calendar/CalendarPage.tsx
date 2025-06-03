@@ -31,6 +31,7 @@ export default function CalendarPage() {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+  const [selectedDate, setSelectedDate] = useState<string>('')
 
   // const [events, setEvents] = useState<Event[]>(() => {
   //   if (typeof window !== 'undefined') {
@@ -91,10 +92,17 @@ useEffect(() => {
               <Search className="h-4 w-4" />
                 Ctrl+K
           </Button>
-          <Button onClick={() => setIsAddEventOpen(true)} className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Add Event
-          </Button>
+          <Button
+  onClick={() => {
+    const today = new Date().toISOString().split('T')[0]
+    setSelectedDate(today) // <-- Set today's date
+    setIsAddEventOpen(true)
+  }}
+  className="flex items-center gap-2"
+>
+  <Plus className="h-4 w-4" />
+  Add Event
+</Button>
         </div>
       </div>
 
@@ -107,6 +115,7 @@ useEffect(() => {
             setIsAddEventOpen={setIsAddEventOpen}
             setIsViewEventOpen={setIsViewEventOpen}
             setSelectedEvent={setSelectedEvent}
+            setSelectedDate={setSelectedDate} // <-- Pass this prop
           />
         </div>
         <div>
@@ -122,6 +131,7 @@ useEffect(() => {
         isOpen={isAddEventOpen}
         setIsOpen={setIsAddEventOpen}
         setEvents={setEvents}
+        selectedDate={selectedDate}
       />
       
       <EditEventDialog

@@ -6,15 +6,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button'
 import toast from 'react-hot-toast'
 import { Event } from './CalendarPage'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface AddEventDialogProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   setEvents: (events: Event[] | ((prevEvents: Event[]) => Event[])) => void
+  selectedDate: string // <-- Add this prop
 }
 
-export default function AddEventDialog({ isOpen, setIsOpen, setEvents }: AddEventDialogProps) {
+export default function AddEventDialog({ isOpen, setIsOpen, setEvents, selectedDate }: AddEventDialogProps) {
   const [newEvent, setNewEvent] = useState<Event>({
     id: '',
     title: '',
@@ -26,6 +27,16 @@ export default function AddEventDialog({ isOpen, setIsOpen, setEvents }: AddEven
     attendees: 1,
     type: 'meeting',
   })
+
+  // Add this useEffect to set today's date when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setNewEvent((prev) => ({
+        ...prev,
+        date: selectedDate || new Date().toISOString().split('T')[0],
+      }))
+    }
+  }, [isOpen, selectedDate])
 
   const handleAddEvent = () => {
     if (!newEvent.title || !newEvent.date) {
