@@ -95,7 +95,7 @@ useEffect(() => {
           <Button
   onClick={() => {
     const today = new Date().toISOString().split('T')[0]
-    setSelectedDate(today) // <-- Set today's date
+    setSelectedDate(today)
     setIsAddEventOpen(true)
   }}
   className="flex items-center gap-2"
@@ -115,7 +115,7 @@ useEffect(() => {
             setIsAddEventOpen={setIsAddEventOpen}
             setIsViewEventOpen={setIsViewEventOpen}
             setSelectedEvent={setSelectedEvent}
-            setSelectedDate={setSelectedDate} // <-- Pass this prop
+            setSelectedDate={setSelectedDate}
           />
         </div>
         <div>

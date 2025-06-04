@@ -29,7 +29,7 @@ export default function EventList({ events, setIsViewEventOpen, setSelectedEvent
       </CardHeader>
       <ErrorBoundary fallback={<p className="p-4 text-red-500">Error loading events</p>}>
         <CardContent className="flex-1 overflow-y-auto custom-scroll">
-          <div className="space-y-4">
+          <div className="space-y-4 mt-1">
             {events.length === 0 ? (
               <p className="text-gray-500 dark:text-gray-400 text-sm">No upcoming events.</p>
             ) : (

@@ -20,20 +20,32 @@ interface EditInfoDialogProps {
   setUser: (user: string) => void;
 }
 
+// Simple hash function (for demo only, NOT secure for production)
+const simpleHash = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash.toString();
+};
+
 export default function EditInfoDialog({
   open,
   onOpenChange,
   setEmail,
   setUser,
 }: EditInfoDialogProps) {
+  const [step, setStep] = useState<'verify' | 'edit'>('verify');
   const [password, setPassword] = useState('');
-  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(true);
   const [newEmail, setNewEmail] = useState('');
   const [newUser, setNewUser] = useState('');
 
   useEffect(() => {
     if (!open) {
-      setIsPasswordDialogOpen(true);
+      // Reset everything when dialog is closed
+      setStep('verify');
       setPassword('');
       setNewEmail('');
       setNewUser('');
@@ -41,13 +53,15 @@ export default function EditInfoDialog({
   }, [open]);
 
   useEffect(() => {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser && !isPasswordDialogOpen) {
-      const user = JSON.parse(currentUser);
-      setNewEmail(user.email || '');
-      setNewUser(user.user || '');
+    if (step === 'edit') {
+      const currentUser = localStorage.getItem('currentUser');
+      if (currentUser) {
+        const user = JSON.parse(currentUser);
+        setNewEmail(user.email || '');
+        setNewUser(user.user || '');
+      }
     }
-  }, [isPasswordDialogOpen]);
+  }, [step]);
 
   const handlePasswordSubmit = () => {
     const currentUser = localStorage.getItem('currentUser');
@@ -57,12 +71,14 @@ export default function EditInfoDialog({
     }
 
     const user = JSON.parse(currentUser);
-    if (password !== user.password) {
+    const hashedInput = simpleHash(password);
+
+    if (hashedInput !== user.password) {
       toast.error('Incorrect password. Please try again.');
       return;
     }
 
-    setIsPasswordDialogOpen(false);
+    setStep('edit');
     setPassword('');
   };
 
@@ -75,6 +91,7 @@ export default function EditInfoDialog({
 
     const parsedUser = JSON.parse(currentUser);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (newEmail && !emailRegex.test(newEmail)) {
       toast.error('Invalid email format.');
       return;
@@ -99,13 +116,15 @@ export default function EditInfoDialog({
   };
 
   return (
-    <>
-      {/* Password Dialog */}
-      <Dialog open={open && isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className='text-center text-2xl'>Verify Password</DialogTitle>
-          </DialogHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-center text-2xl">
+            {step === 'verify' ? 'Verify Password' : 'Edit Info'}
+          </DialogTitle>
+        </DialogHeader>
+
+        {step === 'verify' ? (
           <div className="space-y-4">
             <Label htmlFor="password">Current Password</Label>
             <Input
@@ -115,22 +134,12 @@ export default function EditInfoDialog({
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
             />
+            <DialogFooter>
+              <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+              <Button onClick={handlePasswordSubmit}>Verify</Button>
+            </DialogFooter>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handlePasswordSubmit}>Verify</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Info Dialog */}
-      <Dialog open={open && !isPasswordDialogOpen} onOpenChange={onOpenChange}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className='text-center text-2xl'>Edit Info</DialogTitle>
-          </DialogHeader>
+        ) : (
           <div className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor="edit-username">Username</Label>
@@ -151,15 +160,13 @@ export default function EditInfoDialog({
                 placeholder="New email"
               />
             </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+              <Button onClick={handleSaveChanges}>Save</Button>
+            </DialogFooter>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSaveChanges}>Save</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }

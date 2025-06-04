@@ -112,7 +112,7 @@ export default function EventCalendar({
             return (
               <div
                 key={index}
-                className={`p-2 h-24 border rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                className={`p-2 h-24 border rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800  hover:scale-105 transition-all ${
                   isToday ? 'bg-blue-50 dark:bg-blue-900 border-blue-200 dark:border-blue-700' : 'border-gray-200 dark:border-gray-700'
                 }`}
                 onClick={() => {
@@ -128,7 +128,7 @@ export default function EventCalendar({
                     <div
                       key={event.id}
                       title={event.title}
-                      className={`text-[10px] px-1 py-0.5 rounded cursor-pointer truncate hover:scale-105 transition-all ${getEventTypeColor(event.type)}`}
+                      className={`text-[10px] px-2 py-0.5 rounded cursor-pointer truncate hover:scale-105 transition-all ${getEventTypeColor(event.type)}`}
                       onClick={(e) => {
                         e.stopPropagation()
                         setSelectedEvent(event)
