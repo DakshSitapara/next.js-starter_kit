@@ -1,5 +1,5 @@
 // import { GalleryVerticalEnd } from "lucide-react"
-
+import { Suspense } from 'react';
 import ResetPasswordPage  from "./reset-password"
 
 export default function RegistrPage() {
@@ -11,8 +11,10 @@ export default function RegistrPage() {
             <GalleryVerticalEnd className="size-4" />
           </div>
           Acme Inc.
-        </a> */}       
-        <ResetPasswordPage />
+        </a> */} 
+        <Suspense fallback={<div>Loading...</div>}>
+          <ResetPasswordPage />
+        </Suspense>
       </div>
     </div>
   )
