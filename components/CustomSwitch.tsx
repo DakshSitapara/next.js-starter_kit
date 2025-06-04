@@ -20,7 +20,7 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({ id = 'custom-switch', check
           title="Toggle switch"
           aria-label="Toggle switch"
         />
-        <span className="slider">
+        <span className="slider transition-transform ease-in-out duration-300">
           <div className="star star_1" />
           <div className="star star_2" />
           <div className="star star_3" />

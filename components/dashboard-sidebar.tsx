@@ -98,39 +98,47 @@ export default function DashboardSidebar({
     <Sidebar collapsible="icon">
       <SidebarContent className="flex flex-col h-full justify-between">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xl font-semibold mb-4">Dashboard</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-3xl font-semibold mb-4">Dashboard</SidebarGroupLabel>
           <SidebarGroupContent className="mt-2">
             <SidebarMenu className="space-y-1">
               {items.map((item, index) => {
                 const isActive = activeItem === item.title;
                 const Icon = item.icon;
-
                 return (
                   <SidebarMenuItem
                     key={item.title}
-                    className={`transition-opacity duration-200 delay-${index * 50}`}
+                    className={`transition-opacity duration-200 delay-${index * 50} focus:outline-none `}
                   >
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
-                      className="w-full justify-start transition-all duration-200"
+                      className="w-full justify-start transition-all duration-200 focus:outline-none hover:text-blue-600"
                     >
                       <Link
                         href={item.url}
                         onClick={() => setActiveItem(item.title)}
-                        className={`group flex items-center gap-3 px-4 py-2.5 rounded-lg relative overflow-hidden
-                          ${isActive ? 'bg-blue-50 text-blue-700' : 'hover:bg-blue-50 text-gray-700 hover:text-blue-700'}`}
+                        className={`
+                          group flex items-center gap-3 px-4 py-2.5 rounded-lg relative overflow-hidden
+                          ${isActive 
+                            ? 'bg-blue-50  font-semibold' 
+                            : 'text-gray-700 hover:bg-blue-50'
+                          }`}
+                        aria-current={isActive ? 'page' : undefined}
                       >
                         {isActive && (
-                          <span className="absolute left-0 h-full w-1 bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full" />
+                          <span 
+                            className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full" 
+                            aria-hidden="true"
+                          />
                         )}
                         <Icon
-                          className={`h-5 w-5 transition-colors duration-200
-                            ${isActive ? 'text-blue-600' : 'text-gray-500 group-hover:text-blue-600'}`}
+                          className={`
+                            h-5 w-5 transition-colors duration-200
+                            ${isActive ? 'text-blue-600' : 'text-gray-500 hover:text-black'}
+                          `}
+                          aria-hidden="true"
                         />
-                        <span
-                          className="font-medium"
-                        >
+                        <span className="font-medium truncate">
                           {item.title}
                         </span>
                       </Link>
