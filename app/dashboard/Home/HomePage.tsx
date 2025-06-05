@@ -7,15 +7,12 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-} from 'recharts';
-import {
   ArrowUpRight, DollarSign, Users, CreditCard, Activity,
 } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import {ChartAreaInteractive} from './chart-area-interactive';
 
 const chartData = [
   { month: 'January', revenue: 186 },
@@ -33,62 +30,6 @@ const recentOrders = [
   { id: 'INV004', customer: 'Alice Brown', email: 'alice@example.com', date: '2025-05-25', amount: '$450.00', status: 'Paid' },
   { id: 'INV005', customer: 'Charlie Davis', email: 'charlie@example.com', date: '2025-05-24', amount: '$550.00', status: 'Pending' },
 ];
-
-function ChartCard() {
-  const { theme } = useTheme();
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Overview</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={350}>
-          <AreaChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" className="dark:stroke-gray-600" />
-            <XAxis dataKey="month" stroke="#4B5563" className="dark:stroke-gray-400" />
-            <YAxis stroke="#4B5563" className="dark:stroke-gray-400" />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: theme === 'dark' ? '#1F2937' : 'white',
-                border: '1px solid',
-                borderColor: theme === 'dark' ? '#4B5563' : '#ccc',
-                borderRadius: '4px',
-                color: theme === 'dark' ? '#F3F4F6' : '#1F2937',
-              }}
-            />
-            <Area
-              type="monotone"
-              dataKey="revenue"
-              stroke="#8884d8"
-              fillOpacity={0.3}
-              fill="#8884d8"
-              className="dark:stroke-purple-400 dark:fill-purple-400/30"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </CardContent>
-    </Card>
-  );
-}
-
-function ActiveNowCard() {
-  return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-          Active Now
-        </CardTitle>
-        <Activity className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">+573</div>
-        <p className="text-xs text-gray-600 dark:text-gray-400">
-          +201 since last hour
-        </p>
-      </CardContent>
-    </Card>
-  );
-}
 
 export default function Dashboard01() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -165,11 +106,24 @@ export default function Dashboard01() {
                 </p>
               </CardContent>
             </Card>
-            <ActiveNowCard />
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Active Now
+                </CardTitle>
+                <Activity className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">+573</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  +201 since last hour
+                </p>
+              </CardContent>
+            </Card>
           </div>
           <div className="grid gap-6 grid-cols-1 lg:grid-cols-7">
             <div className="col-span-7 lg:col-span-4">
-              <ChartCard />
+              <ChartAreaInteractive />
             </div>
             <Card className="col-span-7 lg:col-span-3">
               <CardHeader>
