@@ -25,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Generate synthetic visitor data
 const generateVisitorData = (days: number) => {
   const data = [];
   const today = new Date();
@@ -54,7 +53,6 @@ const generateVisitorData = (days: number) => {
   return data;
 };
 
-// ✅ Updated to ensure ticks are unique
 const getXTicks = (data: any[], range: string) => {
   if (!data.length) return [];
 
@@ -207,10 +205,7 @@ export function ChartAreaInteractive() {
               ticks={getXTicks(chartData, timeRange)}
               tickFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
+                return date.toLocaleDateString("en-US", { month: "short", day: "numeric", });
               }}
             />
             <ChartTooltip
@@ -218,10 +213,7 @@ export function ChartAreaInteractive() {
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })
+                    new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", })
                   }
                   indicator="dot"
                 />
