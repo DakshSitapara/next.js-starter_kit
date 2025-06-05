@@ -11,17 +11,7 @@ import {
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {ChartAreaInteractive} from './chart-area-interactive';
-
-const chartData = [
-  { month: 'January', revenue: 186 },
-  { month: 'February', revenue: 305 },
-  { month: 'March', revenue: 237 },
-  { month: 'April', revenue: 73 },
-  { month: 'May', revenue: 209 },
-  { month: 'June', revenue: 214 },
-];
 
 const recentOrders = [
   { id: 'INV001', customer: 'John Doe', email: 'john@example.com', date: '2025-05-28', amount: '$250.00', status: 'Paid' },
@@ -35,7 +25,6 @@ export default function Dashboard01() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [userName, setUserName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const currentUser = localStorage.getItem('currentUser');
