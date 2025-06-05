@@ -25,20 +25,61 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// Generate synthetic visitor data
 const generateVisitorData = (days: number) => {
   const data = [];
-  const today = new Date("2025-06-05T14:12:00+05:30");
+  const today = new Date();
   for (let i = days - 1; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
     const formattedDate = date.toISOString().split("T")[0];
+
+    const desktop = Math.floor(Math.random() * 500) + 50;
+    let mobile = Math.floor(Math.random() * desktop);
+
+    if (mobile < 100) {
+      mobile = 100 + Math.floor(Math.random() * 100);
+    }
+
+    if (mobile > desktop) {
+      mobile = desktop;
+    }
+
     data.push({
       date: formattedDate,
-      desktop: Math.floor(Math.random() * 500) + 50, // Random visitors (50–550)
-      mobile: Math.floor(Math.random() * 500) + 50,
+      desktop,
+      mobile,
     });
   }
   return data;
+};
+
+// ✅ Updated to ensure ticks are unique
+const getXTicks = (data: any[], range: string) => {
+  if (!data.length) return [];
+
+  const count = range === "30d" ? 8 : range === "7d" ? 7 : 9;
+  const step = Math.floor(data.length / (count - 1));
+  const seen = new Set<string>();
+  const ticks: string[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const index = Math.min(i * step, data.length - 1);
+    const dateStr = data[index].date;
+
+    if (!seen.has(dateStr)) {
+      ticks.push(dateStr);
+      seen.add(dateStr);
+    }
+  }
+
+  const startDate = data[0].date;
+  const endDate = data[data.length - 1].date;
+
+  if (!seen.has(startDate)) ticks.unshift(startDate);
+  if (!seen.has(endDate)) ticks.push(endDate);
+
+  return ticks;
 };
 
 const chartConfig = {
@@ -67,13 +108,10 @@ export function ChartAreaInteractive() {
     };
     updateData();
 
-    // Simulate real-time updates every 10 seconds
     const interval = setInterval(updateData, 10000);
-
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [timeRange]);
 
-  // Handle empty data
   if (chartData.length === 0) {
     return (
       <Card>
@@ -91,31 +129,66 @@ export function ChartAreaInteractive() {
         <div className="grid flex-1 gap-1">
           <CardTitle>Visitor Analytics</CardTitle>
           <CardDescription>
-            Showing total visitors for the last {timeRange === "90d" ? "3 months" : timeRange === "30d" ? "30 days" : "7 days"} (updates every 10s)
+            Showing total visitors for the last{" "}
+            {timeRange === "90d"
+              ? "3 months"
+              : timeRange === "30d"
+              ? "30 days"
+              : "7 days"}{" "}
+            (updates every 10s)
           </CardDescription>
         </div>
-        <Select value={timeRange} onValueChange={setTimeRange} aria-label="Select time range">
+        <Select
+          value={timeRange}
+          onValueChange={setTimeRange}
+          aria-label="Select time range"
+        >
           <SelectTrigger className="w-[160px] rounded-lg sm:ml-auto">
             <SelectValue placeholder="Last 3 months" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
-            <SelectItem value="90d" className="rounded-lg">Last 3 months</SelectItem>
-            <SelectItem value="30d" className="rounded-lg">Last 30 days</SelectItem>
-            <SelectItem value="7d" className="rounded-lg">Last 7 days</SelectItem>
+            <SelectItem value="90d" className="rounded-lg">
+              Last 3 months
+            </SelectItem>
+            <SelectItem value="30d" className="rounded-lg">
+              Last 30 days
+            </SelectItem>
+            <SelectItem value="7d" className="rounded-lg">
+              Last 7 days
+            </SelectItem>
           </SelectContent>
         </Select>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="min-h-[200px] max-h-[300px] w-full">
+        <ChartContainer
+          config={chartConfig}
+          className="min-h-[200px] max-h-[300px] w-full"
+        >
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-desktop)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-desktop)" stopOpacity={0.1} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-desktop)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-desktop)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
               <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-mobile)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-mobile)" stopOpacity={0.1} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-mobile)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-mobile)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
@@ -124,7 +197,14 @@ export function ChartAreaInteractive() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
+              minTickGap={0}
+              interval="preserveStartEnd"
+              type="category"
+              domain={[
+                chartData[0]?.date,
+                chartData[chartData.length - 1]?.date,
+              ]}
+              ticks={getXTicks(chartData, timeRange)}
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("en-US", {
@@ -137,12 +217,12 @@ export function ChartAreaInteractive() {
               cursor={false}
               content={
                 <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                  labelFormatter={(value) =>
+                    new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
-                    });
-                  }}
+                    })
+                  }
                   indicator="dot"
                 />
               }
@@ -151,13 +231,13 @@ export function ChartAreaInteractive() {
               dataKey="mobile"
               type="natural"
               fill="url(#fillMobile)"
-              stroke="var(--color-mobile)" 
+              stroke="var(--color-mobile)"
             />
             <Area
               dataKey="desktop"
               type="natural"
               fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)" 
+              stroke="var(--color-desktop)"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />
