@@ -168,3 +168,18 @@ input[type="button"],
 .neumorphic-inset-shadow {
   box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
 }
+
+/* app/globals.css */
+@layer base {
+  :root {
+    --chart-1: 220 70% 50%; /* Light blue for desktop */
+    --chart-2: 160 60% 45%; /* Teal for mobile */
+    --border: 210 20% 90%; /* Light border */
+  }
+
+  .dark {
+    --chart-1: 220 70% 60%; /* Brighter blue for dark mode */
+    --chart-2: 160 60% 55%; /* Brighter teal for dark mode */
+    --border: 210 20% 20%; /* Darker border */
+  }
+}
