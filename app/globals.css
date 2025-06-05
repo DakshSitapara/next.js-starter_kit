@@ -183,3 +183,10 @@ input[type="button"],
     --border: 210 20% 20%; /* Darker border */
   }
 }
+
+.area {
+  stroke: none !important;
+}
+.area {
+  stroke-width: 0;
+}

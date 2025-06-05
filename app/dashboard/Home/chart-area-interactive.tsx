@@ -232,12 +232,15 @@ export function ChartAreaInteractive() {
               type="natural"
               fill="url(#fillMobile)"
               stroke="var(--color-mobile)"
+              strokeWidth="0"
+
             />
             <Area
               dataKey="desktop"
               type="natural"
               fill="url(#fillDesktop)"
               stroke="var(--color-desktop)"
+              strokeWidth="0"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />
