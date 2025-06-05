@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   // Route to page name mapping
   const routeMap: { [key: string]: string } = {
-    '/dashboard/home': 'Home',
+    '/dashboard/Home': 'Home',
     '/dashboard/inbox': 'Inbox',
     '/dashboard/calendar': 'Calendar',
     '/dashboard/settings': 'Settings',
@@ -65,7 +65,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           if (prev <= 1) {
             clearInterval(interval);
             setShowAccessDenied(false);
-            router.push('/dashboard/home');
+            router.push('/dashboard/Home');
             return 0;
           }
           return prev - 1;

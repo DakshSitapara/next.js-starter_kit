@@ -22,14 +22,14 @@ import {
 } from '@/components/ui/hover-card';
 
 const allItems = [
-  { title: 'Home', url: '/dashboard/home', icon: Home },
+  { title: 'Home', url: '/dashboard/Home', icon: Home },
   { title: 'Inbox', url: '/dashboard/inbox', icon: Inbox },
   { title: 'Calendar', url: '/dashboard/calendar', icon: Calendar },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
   { title: 'About Us', url: '/dashboard/about-us', icon: MessageCircleQuestion },
 ];
 
-const allowedRoutesForUnauthenticated = ['/dashboard/home', '/dashboard/about-us'];
+const allowedRoutesForUnauthenticated = ['/dashboard/Home', '/dashboard/about-us'];
 
 const getAvatarColor = (letter: string): string => {
   const colors = [
