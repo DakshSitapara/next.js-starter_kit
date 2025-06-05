@@ -45,9 +45,20 @@ export default function Dashboard01() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-          {isAuthenticated ? `Welcome, ${userName}!` : 'Welcome to Our Platform'}
-        </h1>
+        {isAuthenticated ? (
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Welcome, {userName}!
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Here is your business overview and insights.
+            </p>
+          </div>
+        ) : (
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            Welcome to Our Platform
+          </h1>
+        )}
       </div>
 
       {isAuthenticated ? (
