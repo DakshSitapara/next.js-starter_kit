@@ -1,6 +1,12 @@
 // import { GalleryVerticalEnd } from "lucide-react"
 import { Suspense } from 'react';
 import ResetPasswordPage  from "./reset-password"
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {      
+  title: "Reset Password",            
+  description: "Reset your password to regain access to your account.",  
+};
 
 export default function RegistrPage() {
   return (

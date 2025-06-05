@@ -1,10 +1,15 @@
-'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { MessageCircleQuestion, Mail, Github, Twitter } from 'lucide-react';
-import Link from 'next/link'
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'Learn more about our team and mission.',
+};
 
 const teamMembers = [
   {
@@ -47,13 +52,13 @@ export default function AboutUsPage() {
               <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Contact Us</h4>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-gray-500" />
-                <Link
+                <a
                   href="mailto:dakshsitapara6@gmail.com"
                   target="_blank"
                   className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
                 >
                   dakshsitapara6@gmail.com
-                </Link>
+                </a>
               </div>
               <div className="flex items-center gap-2">
                 <Github className="h-4 w-4 text-gray-500" />

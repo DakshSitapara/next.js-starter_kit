@@ -1,6 +1,12 @@
 // import { GalleryVerticalEnd } from "lucide-react"
 
 import RegistrForm  from "./registr-form"
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {      
+  title: "Register",            
+  description: "Create a new account with your credentials.",  
+};
 
 export default function RegistrPage() {
   return (

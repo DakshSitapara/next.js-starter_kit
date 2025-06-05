@@ -103,7 +103,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
     );
   }
-
+  
   return (
     <SidebarProvider>
       <DashboardSidebar activeItem={activeItem} setActiveItem={setActiveItem} />

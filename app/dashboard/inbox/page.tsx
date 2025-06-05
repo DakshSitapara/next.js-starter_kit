@@ -1,4 +1,3 @@
-'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Mail, Search, Plus, Star, Trash, CheckCircle, XCircle } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Inbox',
+  description: 'Manage your messages and stay updated.',
+};
 
 const messages = [
   {
