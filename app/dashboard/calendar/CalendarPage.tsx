@@ -33,18 +33,6 @@ export default function CalendarPage() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [selectedDate, setSelectedDate] = useState<string>('')
 
-  // const [events, setEvents] = useState<Event[]>(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const savedEvents = localStorage.getItem('calendarEvents')
-  //     return savedEvents ? JSON.parse(savedEvents) : []
-  //   }
-  //   return []
-  // })
-
-  // useEffect(() => {
-  //   localStorage.setItem('calendarEvents', JSON.stringify(events))
-  // }, [events])
-
   const [events, setEvents] = useState<Event[]>(() => {
   if (typeof window !== 'undefined') {
     const currentUser = localStorage.getItem('currentUser');
