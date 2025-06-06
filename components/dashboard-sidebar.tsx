@@ -20,6 +20,11 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '@/components/ui/resizable';
 
 const allItems = [
   { title: 'Home', url: '/dashboard/Home', icon: Home },
@@ -95,7 +100,7 @@ export default function DashboardSidebar({
   }
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar className='h-screen' collapsible="icon">
       <SidebarContent className="flex flex-col h-full justify-between">
         <SidebarGroup>
           <SidebarGroupLabel className="text-3xl font-semibold mb-4">Dashboard</SidebarGroupLabel>

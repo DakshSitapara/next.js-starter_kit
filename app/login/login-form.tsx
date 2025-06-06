@@ -12,13 +12,12 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import {Eye,EyeClosed} from 'lucide-react';
 
-// Simple hash function (for demo only, NOT secure for production)
 const simpleHash = (str: string) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
     hash = (hash << 5) - hash + char;
-    hash = hash & hash; // Convert to 32bit integer
+    hash = hash & hash;
   }
   return hash.toString();
 };

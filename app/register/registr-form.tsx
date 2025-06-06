@@ -43,7 +43,6 @@ const RegisterForm = () => {
     setIsLoading(true);
 
     try {
-      // Validate form data
       registerSchema.parse(formData);
 
       const users = JSON.parse(localStorage.getItem('users') || '[]') as {
@@ -56,7 +55,6 @@ const RegisterForm = () => {
         throw new Error('Email already registered');
       }
 
-      // Save user to localStorage
       users.push({
         user: formData.user,
         email: formData.email,
