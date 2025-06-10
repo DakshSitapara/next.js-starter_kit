@@ -103,23 +103,31 @@ useEffect(() => {
           <h1 className="text-3xl font-bold flex items-center gap-3">Calendar</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Manage your schedule and upcoming events.</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" className='text-wrap text-gray-500'  onClick={() => setIsSearchOpen(true)}>
-                Search Event here..
-              <Search className="h-4 w-4" />
-                Ctrl+K
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            className="flex items-center gap-2 text-sm font-medium transition-colors duration-200 rounded-lg bg-gray-200 text-gray-400  tex font-sans"
+            onClick={() => setIsSearchOpen(true)}
+            aria-label="Open event search"
+          >
+            <Search className="h-4 w-4" />
+            Search Events
+            <kbd className="ml-2 px-2 py-1 text-xs font-mono bg-white dark:bg-black text-gray-500 dark:text-gray-100 rounded-md">
+              Ctrl+K
+            </kbd>
           </Button>
           <Button
-  onClick={() => {
-    const today = new Date().toISOString().split('T')[0]
-    setSelectedDate(today)
-    setIsAddEventOpen(true)
-  }}
-  className="flex items-center gap-2"
->
-  <Plus className="h-4 w-4" />
-  Add Event
-</Button>
+            onClick={() => {
+              const today = new Date().toISOString().split("T")[0];
+              setSelectedDate(today);
+              setIsAddEventOpen(true);
+            }}
+            className="flex items-center gap-2 font-medium text-sm  transition-colors duration-200 font-sans"
+            aria-label="Add new event"
+          >
+            <Plus className="h-4 w-4" />
+            Add Event
+          </Button>
         </div>
       </div>
 
