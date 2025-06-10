@@ -31,7 +31,7 @@ const allItems = [
   { title: 'About Us', url: '/dashboard/about-us', icon: MessageCircleQuestion },
 ];
 
-const allowedRoutesForUnauthenticated = ['/dashboard/Home', '/dashboard/about-us'];
+const allowedRoutesForUnauthenticated = ['/dashboard/about-us'];
 
 const getAvatarColor = (letter: string): string => {
   const colors = [

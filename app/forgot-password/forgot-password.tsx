@@ -25,7 +25,7 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && AuthService.isAuthenticated()) {
-      router.back();
+      router.replace('/dashboard')
     } else {
       setIsCheckingAuth(false)
     }

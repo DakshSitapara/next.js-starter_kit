@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import EventCalendar from './EventCalendar'
 import EventList from './EventList'
 import AddEventDialog from './AddEventDialog'
@@ -10,6 +11,7 @@ import DeleteConfirmDialog from './DeleteConfirmDialog'
 import SearchDialog from './SearchDialog'
 import { Button } from '@/components/ui/button'
 import { Plus, Search } from 'lucide-react'
+import { AuthService } from '@/lib/useAuth'
 
 export interface Event {
   id: string
@@ -24,6 +26,9 @@ export interface Event {
 }
 
 export default function CalendarPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
   const [currentDate, setCurrentDate] = useState(new Date())
   const [isAddEventOpen, setIsAddEventOpen] = useState(false)
   const [isEditEventOpen, setIsEditEventOpen] = useState(false)
@@ -66,6 +71,30 @@ useEffect(() => {
   window.addEventListener('keydown', handleKeyDown)
   return () => window.removeEventListener('keydown', handleKeyDown)
 }, [])
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        if (!AuthService.isAuthenticated()) {
+          router.replace('/login');
+        } else {
+          const userData = AuthService.getAuthUser();
+          setUser(userData);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  if (isLoading || !user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />
+      </div>
+    );
+  }
 
   return  (
     <div className="space-y-6 custom-scroll">

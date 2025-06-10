@@ -12,6 +12,7 @@ import { Sun, Moon } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { toast } from 'react-hot-toast';
+import { AuthService } from '@/lib/useAuth';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -25,7 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   // const [remainingSeconds, setRemainingSeconds] = useState(2);
 
   // Define allowed routes for unauthenticated users
-  const allowedRoutesForUnauthenticated = ['/dashboard/home', '/dashboard/about-us'];
+  const allowedRoutesForUnauthenticated = ['/dashboard/about-us'];
 
   // Route to page name mapping
   const routeMap: { [key: string]: string } = {
@@ -38,7 +39,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   // Check authentication status and client readiness
   useEffect(() => {
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('authUser');
     if (currentUser) {
       setIsAuthenticated(true);
     } else {

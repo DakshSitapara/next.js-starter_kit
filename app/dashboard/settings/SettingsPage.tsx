@@ -23,23 +23,48 @@ export default function SettingsPage() {
 
   const [notifications, setNotifications] = useState(true);
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState('');
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
+  // Load notifications from localStorage
   useEffect(() => {
     const savedNotifications = localStorage.getItem('notifications');
     if (savedNotifications) {
       setNotifications(JSON.parse(savedNotifications));
     }
-
-    const currentUser = localStorage.getItem('authUser');
-    if (currentUser) {
-      const user = JSON.parse(currentUser);
-      setEmail(user.email || '');
-      setUser(user.name || '');
-    }
   }, []);
 
+  // Auth check and user info
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        if (!AuthService.isAuthenticated()) {
+          router.replace('/login');
+        } else {
+          // Prefer AuthService.getAuthUser()
+          const userData = AuthService.getAuthUser();
+          if (userData) {
+            setUser(userData.name || '');
+            setEmail(userData.email || '');
+          } else {
+            // fallback to localStorage
+            const currentUser = localStorage.getItem('authUser');
+            if (currentUser) {
+              const parsed = JSON.parse(currentUser);
+              setUser(parsed.name || '');
+              setEmail(parsed.email || '');
+            }
+          }
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  // Save notifications to localStorage
   useEffect(() => {
     localStorage.setItem('notifications', JSON.stringify(notifications));
   }, [notifications]);
@@ -54,7 +79,7 @@ export default function SettingsPage() {
     AuthService.logout();
     toast.success('Logged out successfully');
     router.replace('/login');
-  };;
+  };
 
   const handleResetPassword = () => {
     const currentUser = localStorage.getItem('authUser');
@@ -68,6 +93,14 @@ export default function SettingsPage() {
     router.push('/forgot-password');
   };
 
+  if (isLoading || !user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -78,7 +111,6 @@ export default function SettingsPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        {/* Account Section */}
         <div className="md:col-span-2">
           <Card>
             <CardHeader>
@@ -106,9 +138,7 @@ export default function SettingsPage() {
           </Card>
         </div>
 
-        {/* Appearance + Quick Actions */}
         <div className="space-y-6">
-          {/* Theme toggle */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -127,46 +157,45 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Actions */}
           <Card>
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap items-center gap-3">
-                  <Button
-                    variant="outline"
-                    className="flex-1 min-w-[100px] text-sm sm:text-base truncate text-center hover:bg-teal-100 hover:scale-105 hover:shadow-2xl transition-transform"
-                    onClick={handleResetPassword}
-                  >
-                    Reset Password
-                  </Button>
-                  <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button 
-                          variant="destructive"
-                          className="flex-1 min-w-[100px] text-sm sm:text-base truncate text-center hover:bg-white hover:text-red-500 hover:scale-105 hover:shadow-2xl hover:border-1 hover:border-red-500  transition-transform"
-                        >
-                          <LogOut className="h-4 w-4" /> 
-                          Log out
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent className="sm:max-w-sm">
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={handleLogout}
-                            className="bg-red-500 text-white hover:bg-white/90 hover:text-red-500"
-                          >
-                            Yes, Logout
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                </div>
+                <Button
+                  variant="outline"
+                  className="flex-1 min-w-[100px] text-sm sm:text-base truncate text-center hover:bg-teal-100 hover:scale-105 hover:shadow-2xl transition-transform"
+                  onClick={handleResetPassword}
+                >
+                  Reset Password
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                      variant="destructive"
+                      className="flex-1 min-w-[100px] text-sm sm:text-base truncate text-center hover:bg-white hover:text-red-500 hover:scale-105 hover:shadow-2xl hover:border-1 hover:border-red-500  transition-transform"
+                    >
+                      <LogOut className="h-4 w-4" /> 
+                      Log out
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="sm:max-w-sm">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleLogout}
+                        className="bg-red-500 text-white hover:bg-white/90 hover:text-red-500"
+                      >
+                        Yes, Logout
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </CardContent>
           </Card>
         </div>
