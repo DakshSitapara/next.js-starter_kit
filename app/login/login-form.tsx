@@ -82,47 +82,56 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="w-full max-w-sm mx-auto bg-transparent backdrop-blur-sm border border-gray-200 dark:border-gray-800">
-        <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+        <CardHeader className="text-center">
+          <CardTitle className='text-2xl'>Login to your account</CardTitle>
           <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-6">
-              {formState.error && (
-                <div className="text-sm text-red-500 text-center">{formState.error}</div>
-              )}
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  value={formState.email}
-                  onChange={handleChange('email')}
-                  required
-                  disabled={formState.isLoading}
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={formState.password}
-                  onChange={handleChange('password')}
-                  required
-                  disabled={formState.isLoading}
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={formState.isLoading}>
-                {formState.isLoading ? 'Logging in...' : 'Login'}
-              </Button>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            {formState.error && (
+              <div className="text-sm text-red-500 text-center">{formState.error}</div>
+            )}
+            <div className="grid gap-3">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                value={formState.email}
+                onChange={handleChange('email')}
+                required
+                disabled={formState.isLoading}
+                autoComplete="username"
+                autoFocus
+              />
             </div>
+            <div className="grid gap-3">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <a
+                  href="/forgot-password"
+                  className=" text-blue-600 ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                >
+                  Forgot your password?
+                </a>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                value={formState.password}
+                onChange={handleChange('password')}
+                required
+                disabled={formState.isLoading}
+                autoComplete="current-password"
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={formState.isLoading}>
+              {formState.isLoading ? 'Logging in...' : 'Login'}
+            </Button>
             <div className="mt-4 text-center text-sm">
               Don't have an account?{' '}
-              <a href="/register" className="underline underline-offset-4">
-                Sign up
+              <a href="/register" className="text-blue-600 ml-auto inline-block text-sm underline-offset-4 hover:underline">
+                Register
               </a>
             </div>
           </form>

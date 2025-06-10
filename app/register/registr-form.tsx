@@ -89,8 +89,8 @@ export function RegistrForm({ className, ...props }: React.ComponentProps<'div'>
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="w-full max-w-sm mx-auto bg-transparent backdrop-blur-sm border border-gray-200 dark:border-gray-800">
-        <CardHeader>
-          <CardTitle>Create your account</CardTitle>
+        <CardHeader className="text-center">
+          <CardTitle className='text-2xl'>Create your account</CardTitle>
           <CardDescription>Enter your details to create your account</CardDescription>
         </CardHeader>
         <CardContent>
@@ -109,6 +109,7 @@ export function RegistrForm({ className, ...props }: React.ComponentProps<'div'>
                   onChange={handleChange('name')}
                   required
                   disabled={formState.isLoading}
+                  autoFocus
                 />
               </div>
               <div className="grid gap-3">
@@ -140,7 +141,7 @@ export function RegistrForm({ className, ...props }: React.ComponentProps<'div'>
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{' '}
-              <a href="/login" className="underline underline-offset-4">
+              <a href="/login" className="text-blue-600 ml-auto inline-block text-sm underline-offset-4 hover:underline">
                 Log in
               </a>
             </div>

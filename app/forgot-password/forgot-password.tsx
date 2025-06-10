@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 import Link from 'next/link';
-
+import { AuthService } from '@/lib/useAuth';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -21,6 +21,15 @@ const ForgotPassword = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+ const [isCheckingAuth, setIsCheckingAuth] = useState(true)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && AuthService.isAuthenticated()) {
+      router.back();
+    } else {
+      setIsCheckingAuth(false)
+    }
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,6 +63,14 @@ const ForgotPassword = () => {
       setIsLoading(false);
     }
   };
+
+    if (isCheckingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />
+      </div>
+    )
+  }
 
   return (
     <div className={cn('flex flex-col gap-6 items-center justify-center')}>

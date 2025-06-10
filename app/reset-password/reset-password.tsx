@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { AuthService } from '@/lib/useAuth';
 
 // Optional simple hash for demo (not secure)
 const simpleHash = (str: string) => {
@@ -37,6 +38,7 @@ export default function ResetPasswordForm() {
   const [success, setSuccess] = useState<string | null>(null);
   const [isValidToken, setIsValidToken] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
   useEffect(() => {
     const tokens = JSON.parse(localStorage.getItem('resetTokens') || '[]') as {
@@ -56,6 +58,14 @@ export default function ResetPasswordForm() {
       setIsValidToken(false);
     }
   }, [token, email]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && AuthService.isAuthenticated()) {
+      router.back();
+    } else {
+      setIsCheckingAuth(false)
+    }
+  }, [router]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,6 +120,14 @@ export default function ResetPasswordForm() {
       setIsLoading(false);
     }
   };
+
+    if (isCheckingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />
+      </div>
+    )
+  }
 
   if (!isValidToken) {
     return (
