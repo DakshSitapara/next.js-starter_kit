@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import { AuthService } from '@/lib/useAuth'
 import { SectionCards } from '@/components/section-cards'
 import { ChartAreaInteractive } from '@/app/dashboard/Home/chart-area-interactive'
+import { Button } from '@/components/ui/button'
+import { Watch } from 'lucide-react'
 
 interface User {
   name: string
@@ -60,13 +62,26 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col overflow-hidden text-foreground">
-      <main className="flex-1 overflow-y-auto px-6">
+      <main className="flex-1 overflow-y-auto">
         <div className="max-w mx-auto">
           <div className="flex items-center justify-between mb-2 mt-1">
-            <h2 className="text-3xl font-semibold">Welcome, {user.name}!</h2>
-              <span className="text-1xl font-medium text-gray-600 dark:text-gray-300 whitespace-pre-line">
+          <div className="flex flex-col">
+            <h2 className="text-3xl font-bold">Welcome, {user.name}!</h2>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                  Here's what's happening with your account today.  
+              </p>
+          </div>
+          <div className="flex items-center gap-2 space-x-2 px-2">
+            <Button className="relative flex items-center gap-2 group hover:bg-primary transition-all duration-200 ease-in-out px-3 py-2 rounded-md">
+              <span className="flex items-center gap-2  group-hover:hidden transition-opacity duration-200 px-1">
+                <Watch className="h-4 w-4" />
+                Time
+              </span>
+              <span className="hidden group-hover:inline transition-opacity duration-200 px-1">
                 {dateTime}
               </span>
+            </Button>
+          </div>       
           </div>
           <SectionCards />
           <div className="mt-8">
