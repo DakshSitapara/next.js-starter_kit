@@ -42,12 +42,12 @@ export default function AboutUsPage() {
       </div>
         <HoverCard>
           <HoverCardTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button className="flex items-center gap-2">
               <Mail className="h-4 w-4" />
               Get in Touch
             </Button>
           </HoverCardTrigger>
-          <HoverCardContent side="right" className="w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+          <HoverCardContent side="right" className="w-80 bg-accent dark:bg-gray-800 rounded-lg shadow-lg p-4">
             <div className="space-y-3">
               <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Contact Us</h4>
               <div className="flex items-center gap-2">
