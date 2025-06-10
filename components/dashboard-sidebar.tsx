@@ -2,29 +2,26 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { Calendar, Home, Inbox, MessageCircleQuestion, Settings } from 'lucide-react';
+import toast from 'react-hot-toast';
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+  Calendar, Home, Inbox, MessageCircleQuestion, Settings, LogOut
+} from 'lucide-react';
+
+import {
+  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
+  SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
+  HoverCard, HoverCardContent, HoverCardTrigger
 } from '@/components/ui/hover-card';
 import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from '@/components/ui/resizable';
+  AlertDialog, AlertDialogTrigger, AlertDialogContent,
+  AlertDialogHeader, AlertDialogTitle, AlertDialogFooter,
+  AlertDialogCancel, AlertDialogAction,
+} from '@/components/ui/alert-dialog';
+import { AuthService } from '@/lib/useAuth';
+import { Button } from '@/components/ui/button';
 
 const allItems = [
   { title: 'Home', url: '/dashboard/Home', icon: Home },
@@ -53,54 +50,50 @@ export default function DashboardSidebar({
   activeItem: string;
   setActiveItem: (item: string) => void;
 }) {
-  const [email, setEmail] = useState<string | null>(null);
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-      const parsed = JSON.parse(currentUser);
+    if (AuthService.isAuthenticated()) {
+      const userData = AuthService.getAuthUser();
+      setUser(userData);
       setIsAuthenticated(true);
-      setEmail(parsed.email);
-      setUser(parsed.user);
     } else {
-      setIsAuthenticated(false);
-      setEmail(null);
       setUser(null);
+      setIsAuthenticated(false);
     }
   }, []);
 
   const items = isAuthenticated
     ? allItems
-    : allItems.filter((item) =>
-        allowedRoutesForUnauthenticated.includes(item.url)
-      );
+    : allItems.filter(item => allowedRoutesForUnauthenticated.includes(item.url));
 
   useEffect(() => {
-    const currentItem = items.find((item) => item.url === pathname);
+    const currentItem = items.find(item => item.url === pathname);
     if (currentItem && currentItem.title !== activeItem) {
       setActiveItem(currentItem.title);
     }
   }, [pathname, activeItem, setActiveItem, items]);
 
+  const handleLogout = () => {
+    AuthService.logout();
+    toast.success('Logged out successfully');
+    router.replace('/login');
+  };
+
   const getInitial = (): string => {
-    if (user) return user.charAt(0).toUpperCase();
-    if (email) return email.charAt(0).toUpperCase();
-    return 'G';
+    return user?.name?.charAt(0).toUpperCase() || 'G';
   };
 
   const initial = getInitial();
   const avatarColor = getAvatarColor(initial);
 
-  if (isAuthenticated === null) {
-    return null;
-  }
+  if (isAuthenticated === null) return null;
 
   return (
-    <Sidebar className='h-screen' collapsible="icon">
+    <Sidebar className="h-screen" collapsible="icon">
       <SidebarContent className="flex flex-col h-full justify-between">
         <SidebarGroup>
           <SidebarGroupLabel className="text-3xl font-semibold mb-4">Dashboard</SidebarGroupLabel>
@@ -110,42 +103,27 @@ export default function DashboardSidebar({
                 const isActive = activeItem === item.title;
                 const Icon = item.icon;
                 return (
-                  <SidebarMenuItem
-                    key={item.title}
-                    className={`transition-opacity duration-200 delay-${index * 50} focus:outline-none `}
-                  >
+                  <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
-                      className="w-full justify-start transition-all duration-200 focus:outline-none hover:text-blue-600"
+                      className="w-full justify-start hover:text-blue-600"
                     >
                       <Link
                         href={item.url}
                         onClick={() => setActiveItem(item.title)}
                         className={`
-                          group flex items-center gap-3 px-4 py-2.5 rounded-lg relative overflow-hidden
-                          ${isActive 
-                            ? 'bg-blue-50  font-semibold' 
-                            : 'text-gray-700 hover:bg-blue-50'
-                          }`}
-                        aria-current={isActive ? 'page' : undefined}
+                          group flex items-center gap-3 px-4 py-2.5 rounded-lg relative
+                          ${isActive ? 'bg-blue-50 font-semibold' : 'text-gray-700 hover:bg-blue-50'}
+                        `}
                       >
                         {isActive && (
-                          <span 
-                            className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full" 
-                            aria-hidden="true"
-                          />
+                          <span className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full" />
                         )}
                         <Icon
-                          className={`
-                            h-5 w-5 transition-colors duration-200
-                            ${isActive ? 'text-blue-600' : 'text-gray-500 hover:text-black'}
-                          `}
-                          aria-hidden="true"
+                          className={`h-5 w-5 ${isActive ? 'text-blue-600' : 'text-gray-500'}`}
                         />
-                        <span className="font-medium truncate">
-                          {item.title}
-                        </span>
+                        <span className="truncate">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -159,49 +137,54 @@ export default function DashboardSidebar({
           <SidebarGroupContent className="border-t pt-2 mt-4">
             <HoverCard openDelay={200} closeDelay={200}>
               <HoverCardTrigger asChild>
-                <SidebarMenuButton className="flex items-center gap-3 px-4 py-6 rounded-lg hover:bg-gray-100 focus:outline-none transition-all duration-300">
-                  <div className={`h-9 w-9 rounded-full flex items-center justify-center text-white text-base font-semibold ${avatarColor} ring-2 ring-offset-2 ring-gray-200 dark:ring-gray-700 shadow-sm`}>
+                <SidebarMenuButton className="flex items-center gap-3 px-4 py-6 rounded-lg hover:bg-gray-100">
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center text-white text-base font-semibold ${avatarColor}`}>
                     {initial}
                   </div>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate max-w-[120px]">
-                    {isAuthenticated ? (user || 'User') : 'Guest'}
+                  <span className="text-sm font-semibold truncate max-w-[120px]">
+                    {user?.name || 'Guest'}
                   </span>
                 </SidebarMenuButton>
               </HoverCardTrigger>
-              <HoverCardContent className="w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-4 space-y-2 transition-all duration-200">
-                {isAuthenticated ? (
+
+              <HoverCardContent className="w-64 bg-white dark:bg-gray-800 border rounded-lg shadow-xl p-4 space-y-2">
+                {isAuthenticated && user ? (
                   <>
-                    <div className="flex items-center gap-3 px-2 py-1">
+                    <div className="flex items-center gap-3">
                       <div className={`h-8 w-8 rounded-full flex items-center justify-center text-white text-sm font-semibold ${avatarColor}`}>
                         {initial}
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {user || 'User'}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                          {email || 'No email'}
-                        </p>
+                        <p className="text-sm font-medium">{user.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{user.email}</p>
                       </div>
                     </div>
-                    <div
-                      className="cursor-pointer px-2 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors duration-200"
-                      onClick={() => {
-                        localStorage.removeItem('currentUser');
-                        toast.success('Logged out successfully');
-                        router.push('/login');
-                      }}
-                    >
-                      Sign out
-                    </div>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" className="w-full text-sm flex gap-2 items-center mt-2">
+                          <LogOut className="h-4 w-4" />
+                          Log out
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="sm:max-w-sm">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={handleLogout}
+                            className="bg-red-500 text-white hover:bg-white/90 hover:text-red-500"
+                          >
+                            Yes, Logout
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </>
                 ) : (
-                  <div
-                    className="cursor-pointer px-2 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors duration-200"
-                    onClick={() => router.push('/login')}
-                  >
-                    Sign in
-                  </div>
+                  <Button onClick={() => router.push('/login')} className="w-full text-sm">Sign In</Button>
                 )}
               </HoverCardContent>
             </HoverCard>

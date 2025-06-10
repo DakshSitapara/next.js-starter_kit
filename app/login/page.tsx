@@ -1,6 +1,6 @@
 // import { GalleryVerticalEnd } from "lucide-react"
 
-import  LoginForm  from "./login-form"
+import  {LoginForm}  from "./login-form"
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

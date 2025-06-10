@@ -26,11 +26,11 @@ export default function SettingsPage() {
       setNotifications(JSON.parse(savedNotifications));
     }
 
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('authUser');
     if (currentUser) {
       const user = JSON.parse(currentUser);
       setEmail(user.email || '');
-      setUser(user.user || '');
+      setUser(user.name || '');
     }
   }, []);
 
@@ -45,13 +45,13 @@ export default function SettingsPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('authUser');
     toast.success('Logged out successfully!');
     router.push('/login');
   };
 
   const handleResetPassword = () => {
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('authUser');
     if (!currentUser) return toast.error('No user logged in.');
     const parsedUser = JSON.parse(currentUser);
     if (!parsedUser.email) {
