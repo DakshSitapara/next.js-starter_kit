@@ -3,13 +3,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { User, Palette, Edit } from 'lucide-react';
+import { User, Palette, Edit, LogOut } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import CustomSwitch from '@/components/CustomSwitch';
 import EditInfoDialog from './edit-info';
+import { AuthService } from '@/lib/useAuth';
+import {
+  AlertDialog, AlertDialogTrigger, AlertDialogContent,
+  AlertDialogHeader, AlertDialogTitle, AlertDialogFooter,
+  AlertDialogCancel, AlertDialogAction,
+} from '@/components/ui/alert-dialog';
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
@@ -45,13 +51,15 @@ export default function SettingsPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('authUser');
-    toast.success('Logged out successfully!');
-    router.push('/login');
-  };
+    AuthService.logout();
+    toast.success('Logged out successfully');
+    router.replace('/login');
+  };;
 
   const handleResetPassword = () => {
     const currentUser = localStorage.getItem('authUser');
+    AuthService.logout();
+    toast.success('Logged out successfully!');
     if (!currentUser) return toast.error('No user logged in.');
     const parsedUser = JSON.parse(currentUser);
     if (!parsedUser.email) {
@@ -133,13 +141,31 @@ export default function SettingsPage() {
                   >
                     Reset Password
                   </Button>
-                  <Button
-                    variant="outline"
-                    className="flex-1 min-w-[100px] text-sm sm:text-base truncate text-center hover:bg-red-600 hover:text-white hover:scale-105 hover:shadow-2xl transition-transform"
-                    onClick={handleLogout}
-                  >
-                    Log Out
-                  </Button>
+                  <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button 
+                          variant="destructive"
+                          className="flex-1 min-w-[100px] text-sm sm:text-base truncate text-center hover:bg-white hover:text-red-500 hover:scale-105 hover:shadow-2xl hover:border-1 hover:border-red-500  transition-transform"
+                        >
+                          <LogOut className="h-4 w-4" /> 
+                          Log out
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="sm:max-w-sm">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={handleLogout}
+                            className="bg-red-500 text-white hover:bg-white/90 hover:text-red-500"
+                          >
+                            Yes, Logout
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             </CardContent>
           </Card>
