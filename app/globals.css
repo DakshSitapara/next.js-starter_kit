@@ -190,3 +190,13 @@ input[type="button"],
 .area {
   stroke-width: 0;
 }
+
+:root {
+  --toast-bg: #ffffff; /* Light mode toast background */
+  --toast-text: #1f2937; /* Light mode toast text */
+}
+
+.dark {
+  --toast-bg: #1f2937; /* Dark mode toast background */
+  --toast-text: #e5e7eb; /* Dark mode toast text */
+}

@@ -24,7 +24,7 @@ export default function EventList({ events, setIsViewEventOpen, setSelectedEvent
 
   return (
     <Card className="max-h-[70vh] flex flex-col">
-      <CardHeader className="sticky top-0 bg-white dark:bg-gray-900 z-10">
+      <CardHeader>
         <CardTitle className="text-2xl">Upcoming Events</CardTitle>
       </CardHeader>
       <ErrorBoundary fallback={<p className="p-4 text-red-500">Error loading events</p>}>

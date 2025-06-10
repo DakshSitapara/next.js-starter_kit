@@ -1,10 +1,8 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { MessageCircleQuestion, Mail, Github, Twitter } from 'lucide-react';
-
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -30,54 +28,60 @@ const teamMembers = [
 ];
 
 export default function AboutUsPage() {
-
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">About Us</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+            About Us
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
             Learn more about our app and the team behind it.
           </p>
-      </div>
+        </div>
         <HoverCard>
           <HoverCardTrigger asChild>
-            <Button className="flex items-center gap-2">
-              <Mail className="h-4 w-4" />
+            <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center gap-2">
+              <Mail className="h-5 w-5" />
               Get in Touch
             </Button>
           </HoverCardTrigger>
-          <HoverCardContent side="right" className="w-80 bg-accent dark:bg-gray-800 rounded-lg shadow-lg p-4">
-            <div className="space-y-3">
-              <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Contact Us</h4>
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-gray-500" />
+          <HoverCardContent
+            side="right"
+            className="w-80 bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-5 transition-all duration-300 transform hover:scale-105 border border-gray-200 dark:border-gray-700"
+          >
+            <div className="space-y-4">
+              <h4 className="text-base font-bold text-gray-900 dark:text-white">
+                Contact Us
+              </h4>
+              <div className="flex items-center gap-3">
+                <Mail className="h-5 w-5 text-gray-500" />
                 <a
                   href="mailto:dakshsitapara6@gmail.com"
                   target="_blank"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline transition-colors duration-200"
                 >
                   dakshsitapara6@gmail.com
                 </a>
               </div>
-              <div className="flex items-center gap-2">
-                <Github className="h-4 w-4 text-gray-500" />
+              <div className="flex items-center gap-3">
+                <Github className="h-5 w-5 text-gray-500" />
                 <a
                   href="http://github.com/DakshSitapara"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline transition-colors duration-200"
                 >
                   GitHub
                 </a>
               </div>
-              <div className="flex items-center gap-2">
-                <Twitter className="h-4 w-4 text-gray-500" />
+              <div className="flex items-center gap-3">
+                <Twitter className="h-5 w-5 text-gray-500" />
                 <a
                   href="https://x.com/home"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline transition-colors duration-200"
                 >
                   Twitter
                 </a>
@@ -85,17 +89,17 @@ export default function AboutUsPage() {
             </div>
           </HoverCardContent>
         </HoverCard>
-    </div>
+      </div>
 
-      <Card>
+      <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MessageCircleQuestion className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-3 text-2xl font-semibold text-gray-900 dark:text-white">
+            <MessageCircleQuestion className="h-6 w-6 text-blue-500" />
             Our Mission
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed">
             This app was built to demonstrate a modern dashboard interface using Next.js,
             React, and Tailwind CSS. It includes a collapsible sidebar, theming options,
             and modular components. Our goal is to provide a seamless and efficient user
@@ -104,24 +108,26 @@ export default function AboutUsPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg">
         <CardHeader>
-          <CardTitle>Meet the Team</CardTitle>
+          <CardTitle className="text-2xl font-semibold text-gray-900 dark:text-white">
+            Meet the Team
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3">
             {teamMembers.map((member) => (
               <div
                 key={member.name}
-                className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+                className="p-5 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-md hover:-translate-y-1"
               >
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {member.name}
                 </h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   {member.role}
                 </p>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
                   {member.bio}
                 </p>
               </div>
