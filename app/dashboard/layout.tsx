@@ -20,9 +20,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { theme, setTheme } = useTheme();
   const [isReady, setIsReady] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
-  const [restrictedPageName, setRestrictedPageName] = useState('');
-  const [remainingSeconds, setRemainingSeconds] = useState(2);
+  // const [showAccessDenied, setShowAccessDenied] = useState(false);
+  // const [restrictedPageName, setRestrictedPageName] = useState('');
+  // const [remainingSeconds, setRemainingSeconds] = useState(2);
 
   // Define allowed routes for unauthenticated users
   const allowedRoutesForUnauthenticated = ['/dashboard/home', '/dashboard/about-us'];
@@ -54,27 +54,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [pathname]);
 
   // Handle access restriction for unauthenticated users
-  useEffect(() => {
-    if (isReady && isAuthenticated === false && !allowedRoutesForUnauthenticated.includes(pathname)) {
-      setRestrictedPageName(routeMap[pathname] || 'Page');
-      setShowAccessDenied(true);
-      setRemainingSeconds(2); // Reset countdown
+  // useEffect(() => {
+  //   if (isReady && isAuthenticated === false && !allowedRoutesForUnauthenticated.includes(pathname)) {
+  //     setRestrictedPageName(routeMap[pathname] || 'Page');
+  //     setShowAccessDenied(true);
+  //     setRemainingSeconds(0); // Reset countdown
 
-      const interval = setInterval(() => {
-        setRemainingSeconds((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            setShowAccessDenied(false);
-            router.push('/dashboard/Home');
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000); 
+  //     const interval = setInterval(() => {
+  //       setRemainingSeconds((prev) => {
+  //         if (prev <= 1) {
+  //           clearInterval(interval);
+  //           setShowAccessDenied(false);
+  //           router.push('/dashboard/Home');
+  //           return 0;
+  //         }
+  //         return prev - 1;
+  //       });
+  //     }, 1);
 
-      return () => clearInterval(interval);
-    }
-  }, [isReady, isAuthenticated, pathname, router]);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [isReady, isAuthenticated, pathname, router]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -86,23 +86,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return <div className="h-screen bg-background animate-pulse" />;
   }
 
-  if (showAccessDenied) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-background">
-        <div className="text-center p-6 rounded-lg bg-white dark:bg-neutral-900 shadow-md">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-            Access Denied
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            Login to access this page ({restrictedPageName}).
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-            Redirecting to Home in {remainingSeconds} second{remainingSeconds !== 1 ? 's' : ''}...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // if (showAccessDenied) {
+  //   return (
+  //     <div className="h-screen flex items-center justify-center bg-background">
+  //       <div className="text-center p-6 rounded-lg bg-white dark:bg-neutral-900 shadow-md">
+  //         <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+  //           Access Denied
+  //         </h2>
+  //         <p className="text-gray-600 dark:text-gray-400">
+  //           Login to access this page ({restrictedPageName}).
+  //         </p>
+  //         <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+  //           Redirecting to Home in {remainingSeconds} second{remainingSeconds !== 1 ? 's' : ''}...
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
   
   return (
     <SidebarProvider>

@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useCallback } from 'react';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import {Eye,EyeClosed} from 'lucide-react';
+import { setCookie } from 'cookies-next' 
 
 const simpleHash = (str: string) => {
   let hash = 0;
@@ -29,6 +30,8 @@ const loginSchema = z.object({
 
 const LoginForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get('redirect') || '/dashboard/Home';  
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -57,9 +60,11 @@ const LoginForm = () => {
         throw new Error('Invalid password');
       }
 
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      toast.success('Login successful');
-      router.push('/dashboard');
+      setCookie('isAuthenticated', 'true', { path: '/', maxAge: 60 * 60 * 24 * 7 }); // 7 days
+      localStorage.setItem('currentUser', JSON.stringify(user))
+      toast.success('Login successful')
+      router.push(redirectPath);
+
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
@@ -81,6 +86,7 @@ const LoginForm = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   }, [formData]);
 
+  
   return (
     <div className={cn('flex flex-col gap-6 items-center justify-center')}>
       <Card className="w-full max-w-md border bg-transparent border-gray-200 dark:border-gray-200 text-black dark:text-black shadow-md">

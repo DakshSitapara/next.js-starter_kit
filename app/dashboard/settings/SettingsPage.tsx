@@ -125,22 +125,22 @@ export default function SettingsPage() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  className="w-1/2 hover:bg-teal-100 hover:scale-105 hover:shadow-2xl transition-transform"
-                  onClick={handleResetPassword}
-                >
-                  Reset Password
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-1/2 hover:bg-red-600 hover:text-white hover:scale-105 hover:shadow-2xl transition-transform"
-                  onClick={handleLogout}
-                >
-                  Log Out
-                </Button>
-              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    variant="outline"
+                    className="flex-1 min-w-[100px] text-sm sm:text-base truncate text-center hover:bg-teal-100 hover:scale-105 hover:shadow-2xl transition-transform"
+                    onClick={handleResetPassword}
+                  >
+                    Reset Password
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1 min-w-[100px] text-sm sm:text-base truncate text-center hover:bg-red-600 hover:text-white hover:scale-105 hover:shadow-2xl transition-transform"
+                    onClick={handleLogout}
+                  >
+                    Log Out
+                  </Button>
+                </div>
             </CardContent>
           </Card>
         </div>
