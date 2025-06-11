@@ -3,10 +3,15 @@
 import { useState, useEffect } from "react";
 import { AuthService } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Github, Sparkles } from "lucide-react";
+import { ArrowRight, Github, Sparkles, MessageCircleQuestion } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function HeroSection() {
   const router = useRouter(); 
@@ -31,6 +36,30 @@ export default function HeroSection() {
 
   return (
     <div className="items-center-safe dark:bg-black">
+      {/* Top-right About Us button */}
+      <div className="absolute top-4 right-4 z-50">
+        <Link href="dashboard/about-us">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              aria-label="About Us"
+              size="icon"
+              variant="ghost"
+              className="rounded-full bg-transparent"
+            >
+              <MessageCircleQuestion className="h-6 w-6" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent
+            side="bottom"
+            className="p-2 rounded-lg bg-accent text-black dark:text-white"
+          >
+            <p>About Us</p>
+          </TooltipContent>
+        </Tooltip>
+        </Link>
+      </div>
+
       <section
         className="relative flex flex-col items-center justify-center py-49"
         aria-label="Nextjs Starter Kit Hero"

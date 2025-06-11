@@ -99,7 +99,7 @@ export default function DashboardSidebar({
           <SidebarGroupLabel className="text-3xl font-semibold mb-4">Dashboard</SidebarGroupLabel>
           <SidebarGroupContent className="mt-2">
             <SidebarMenu className="space-y-1">
-              {items.map((item, index) => {
+              {items.map((item) => {
                 const isActive = activeItem === item.title;
                 const Icon = item.icon;
                 return (
