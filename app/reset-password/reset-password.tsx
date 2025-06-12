@@ -9,17 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { AuthService } from '@/lib/useAuth';
-
-// Optional simple hash for demo (not secure)
-const simpleHash = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash |= 0;
-  }
-  return hash.toString();
-};
+import bcrypt from 'bcryptjs';
 
 const schema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
@@ -66,7 +56,7 @@ export default function ResetPasswordForm() {
     }
   }, [router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -79,20 +69,19 @@ export default function ResetPasswordForm() {
 
       const users = JSON.parse(localStorage.getItem('users') || '[]') as {
         email: string;
-        password: string;
+        passwordHash: string;
+        name: string;
       }[];
 
       const userIndex = users.findIndex((u) => u.email === email);
       if (userIndex === -1) throw new Error('User not found');
 
-      // Check if new password matches the current password
-      const currentHashedPassword = users[userIndex].password;
-      const newHashedPassword = simpleHash(password);
-      if (newHashedPassword === currentHashedPassword) {
-        throw new Error('New password cannot be the same as the current password');
-      }
+      const isSame = await bcrypt.compare(password, users[userIndex].passwordHash);
+      if (isSame) throw new Error('New password cannot be the same as the current password');
 
-      users[userIndex].password = newHashedPassword;
+      const newHashedPassword = await bcrypt.hash(password, 10);
+      users[userIndex].passwordHash = newHashedPassword;
+
       localStorage.setItem('users', JSON.stringify(users));
 
       const tokens = JSON.parse(localStorage.getItem('resetTokens') || '[]') as {
