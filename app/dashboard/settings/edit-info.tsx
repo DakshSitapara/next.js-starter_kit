@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import bcrypt from 'bcryptjs'
 
 interface EditInfoDialogProps {
   open: boolean;
@@ -19,17 +20,6 @@ interface EditInfoDialogProps {
   setEmail: (email: string) => void;
   setUser: (user: string) => void;
 }
-
-// Simple hash function (for demo only, NOT secure for production)
-const simpleHash = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  return hash.toString();
-};
 
 export default function EditInfoDialog({
   open,
@@ -62,17 +52,27 @@ export default function EditInfoDialog({
     }
   }, [step]);
 
-  const handlePasswordSubmit = () => {
-    const currentUser = localStorage.getItem('authUser');
-    if (!currentUser) {
+  const handlePasswordSubmit = async () => {
+    const allUsers = localStorage.getItem('users');
+    const authUser = localStorage.getItem('authUser');
+
+    if (!authUser || !allUsers) {
       toast.error('No user logged in.');
       return;
     }
 
-    const user = JSON.parse(currentUser);
-    const hashedInput = simpleHash(password);
+    const { email } = JSON.parse(authUser);
+    const users = JSON.parse(allUsers);
+    const fullUser = users.find((u: any) => u.email === email);
 
-    if (hashedInput !== user.password) {
+    if (!fullUser) {
+      toast.error('User not found.');
+      return;
+    }
+
+    const isMatch = await bcrypt.compare(password, fullUser.passwordHash);
+
+    if (!isMatch) {
       toast.error('Incorrect password. Please try again.');
       return;
     }
