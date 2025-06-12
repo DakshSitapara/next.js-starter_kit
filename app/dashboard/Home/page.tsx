@@ -1,4 +1,4 @@
-import Dashboard01 from "./HomePage";
+import DashboardPage from "./HomePage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-   <Dashboard01 />
+   <DashboardPage />
   );
 }
