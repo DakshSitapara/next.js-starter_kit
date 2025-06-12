@@ -84,7 +84,7 @@ export default function SettingsPage() {
   const handleResetPassword = () => {
     const currentUser = localStorage.getItem('authUser');
     AuthService.logout();
-    toast.success('Logged out successfully!');
+    toast.success('Redirecting to Forgot Password...');
     if (!currentUser) return toast.error('No user logged in.');
     const parsedUser = JSON.parse(currentUser);
     if (!parsedUser.email) {
