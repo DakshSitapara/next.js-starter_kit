@@ -40,7 +40,7 @@ export default function CalendarPage() {
 
   const [events, setEvents] = useState<Event[]>(() => {
   if (typeof window !== 'undefined') {
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('authUser');
     if (currentUser) {
       const user = JSON.parse(currentUser);
       const storedEventsKey = `calendarEvents_${user.user}`;
@@ -53,7 +53,7 @@ export default function CalendarPage() {
 });
 
 useEffect(() => {
-  const currentUser = localStorage.getItem('currentUser');
+  const currentUser = localStorage.getItem('authUser');
   if (currentUser) {
     const user = JSON.parse(currentUser);
     const storedEventsKey = `calendarEvents_${user.user}`;
