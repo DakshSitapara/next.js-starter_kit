@@ -87,6 +87,13 @@ export default function AddEventDialog({ isOpen, setIsOpen, setEvents, selectedD
         <DialogHeader>
           <DialogTitle className="text-center">Add New Event</DialogTitle>
         </DialogHeader>
+        <form
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleAddEvent();
+        }}
+        >
         <div className="space-y-4">
           <div>
             <Label htmlFor="title">Event Title *</Label>
@@ -188,10 +195,11 @@ export default function AddEventDialog({ isOpen, setIsOpen, setEvents, selectedD
             />
           </div>
           <div className="flex gap-2">
-            <Button onClick={handleAddEvent} className="flex-1">Add Event</Button>
             <Button variant="outline" onClick={() => setIsOpen(false)} className="flex-1">Cancel</Button>
+            <Button type='submit' className="flex-1">Add Event</Button>
           </div>
         </div>
+        </form>
       </DialogContent>
     </Dialog>
   )

@@ -54,17 +54,17 @@ export default function EditInfoDialog({
 
   useEffect(() => {
     if (step === 'edit') {
-      const currentUser = localStorage.getItem('currentUser');
+      const currentUser = localStorage.getItem('authUser');
       if (currentUser) {
         const user = JSON.parse(currentUser);
         setNewEmail(user.email || '');
-        setNewUser(user.user || '');
+        setNewUser(user.name || '');
       }
     }
   }, [step]);
 
   const handlePasswordSubmit = () => {
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('authUser');
     if (!currentUser) {
       toast.error('No user logged in.');
       return;
@@ -83,7 +83,7 @@ export default function EditInfoDialog({
   };
 
   const handleSaveChanges = () => {
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('authUser');
     if (!currentUser) {
       toast.error('No user logged in.');
       return;
@@ -97,20 +97,20 @@ export default function EditInfoDialog({
       return;
     }
 
-    if (newUser.length < 3) {
+    if (newUser.trim().length < 3) {
       toast.error('Username must be at least 3 characters.');
       return;
     }
 
     const updatedUser = {
       ...parsedUser,
-      email: newEmail,
-      user: newUser,
+      email: newEmail.trim(),
+      name: newUser.trim(),
     };
 
-    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-    setEmail(newEmail);
-    setUser(newUser);
+    localStorage.setItem('authUser', JSON.stringify(updatedUser));
+    setEmail(updatedUser.email);
+    setUser(updatedUser.name); // Update with `name`
     toast.success('User info updated successfully!');
     onOpenChange(false);
   };
@@ -125,22 +125,36 @@ export default function EditInfoDialog({
         </DialogHeader>
 
         {step === 'verify' ? (
-          <div className="space-y-4">
-            <Label htmlFor="password">Current Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-            />
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handlePasswordSubmit();
+            }}
+          >
+            <div className="grid gap-2">
+              <Label htmlFor="password">Current Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+              />
+            </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button onClick={handlePasswordSubmit}>Verify</Button>
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+              <Button type="submit">Verify</Button> {/* Enter key triggers this */}
             </DialogFooter>
-          </div>
+          </form>
         ) : (
-          <div className="space-y-4">
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSaveChanges();
+            }}
+          >
             <div className="grid gap-2">
               <Label htmlFor="edit-username">Username</Label>
               <Input
@@ -161,10 +175,10 @@ export default function EditInfoDialog({
               />
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button onClick={handleSaveChanges}>Save</Button>
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+              <Button type="submit">Save</Button> {/* Enter will trigger this */}
             </DialogFooter>
-          </div>
+          </form>
         )}
       </DialogContent>
     </Dialog>
