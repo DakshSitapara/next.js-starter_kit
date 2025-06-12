@@ -21,53 +21,45 @@ export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
-  const [notifications, setNotifications] = useState(true);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState('');
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  // Load notifications from localStorage
-  useEffect(() => {
-    const savedNotifications = localStorage.getItem('notifications');
-    if (savedNotifications) {
-      setNotifications(JSON.parse(savedNotifications));
-    }
-  }, []);
-
-  // Auth check and user info
+  // Check if user is authenticated
   useEffect(() => {
     const checkAuth = async () => {
       try {
         if (!AuthService.isAuthenticated()) {
           router.replace('/login');
-        } else {
-          // Prefer AuthService.getAuthUser()
-          const userData = AuthService.getAuthUser();
-          if (userData) {
-            setUser(userData.name || '');
-            setEmail(userData.email || '');
-          } else {
-            // fallback to localStorage
-            const currentUser = localStorage.getItem('authUser');
-            if (currentUser) {
-              const parsed = JSON.parse(currentUser);
-              setUser(parsed.name || '');
-              setEmail(parsed.email || '');
-            }
-          }
+          return;
         }
+
+        // Try getting user from AuthService first
+        const userData = AuthService.getAuthUser();
+        if (userData) {
+          setUser(userData.name || '');
+          setEmail(userData.email || '');
+          return;
+        }
+
+        // Fallback: check localStorage
+        const localUser = localStorage.getItem('authUser');
+        if (localUser) {
+          const parsed = JSON.parse(localUser);
+          setUser(parsed.name || '');
+          setEmail(parsed.email || '');
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        router.replace('/login'); // Optional: redirect on unexpected error
       } finally {
         setIsLoading(false);
       }
     };
+
     checkAuth();
   }, [router]);
-
-  // Save notifications to localStorage
-  useEffect(() => {
-    localStorage.setItem('notifications', JSON.stringify(notifications));
-  }, [notifications]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';

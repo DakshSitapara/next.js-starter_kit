@@ -44,7 +44,6 @@ export default function EditInfoDialog({
 
   useEffect(() => {
     if (!open) {
-      // Reset everything when dialog is closed
       setStep('verify');
       setPassword('');
       setNewEmail('');
@@ -110,7 +109,7 @@ export default function EditInfoDialog({
 
     localStorage.setItem('authUser', JSON.stringify(updatedUser));
     setEmail(updatedUser.email);
-    setUser(updatedUser.name); // Update with `name`
+    setUser(updatedUser.name);
     toast.success('User info updated successfully!');
     onOpenChange(false);
   };
@@ -144,7 +143,7 @@ export default function EditInfoDialog({
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button type="submit">Verify</Button> {/* Enter key triggers this */}
+              <Button type="submit">Verify</Button>
             </DialogFooter>
           </form>
         ) : (
@@ -176,7 +175,7 @@ export default function EditInfoDialog({
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button type="submit">Save</Button> {/* Enter will trigger this */}
+              <Button type="submit">Save</Button>
             </DialogFooter>
           </form>
         )}
