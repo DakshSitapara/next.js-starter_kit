@@ -14,7 +14,7 @@ import {
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { useUserInitial } from "@/hooks/useUserInitial";
 
-export default function HeroSection() {
+export default function Page() {
 
     const { user, isAuthenticated, loading } = useAuthUser();
     const { initial, avatarColor } = useUserInitial(user?.name, user?.email);
@@ -60,7 +60,7 @@ export default function HeroSection() {
       </div>
 
       <section
-        className="relative flex flex-col items-center justify-center py-49"
+        className="relative flex flex-col items-center justify-center py-53.5"
         aria-label="Nextjs Starter Kit Hero"
       >
         {/* Background gradient */}
