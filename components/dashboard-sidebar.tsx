@@ -22,26 +22,14 @@ import {
 } from '@/components/ui/alert-dialog';
 import { AuthService } from '@/lib/useAuth';
 import { Button } from '@/components/ui/button';
+import { useUserInitial } from '@/hooks/useUserInitial';
 
 const allItems = [
   { title: 'Home', url: '/dashboard/Home', icon: Home },
   { title: 'Inbox', url: '/dashboard/inbox', icon: Inbox },
   { title: 'Calendar', url: '/dashboard/calendar', icon: Calendar },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
-  { title: 'About Us', url: '/dashboard/about-us', icon: MessageCircleQuestion },
 ];
-
-const allowedRoutesForUnauthenticated = ['/dashboard/about-us'];
-
-const getAvatarColor = (letter: string): string => {
-  const colors = [
-    'bg-red-600', 'bg-blue-600', 'bg-green-600', 'bg-purple-600', 'bg-orange-600',
-    'bg-indigo-600', 'bg-pink-600', 'bg-teal-600', 'bg-cyan-600', 'bg-amber-600',
-    'bg-lime-600', 'bg-emerald-600', 'bg-violet-600', 'bg-fuchsia-600', 'bg-rose-600',
-  ];
-  const index = letter.toUpperCase().charCodeAt(0) - 65;
-  return colors[index % colors.length] || 'bg-gray-600';
-};
 
 export default function DashboardSidebar({
   activeItem,
@@ -68,8 +56,7 @@ export default function DashboardSidebar({
 
   const items = isAuthenticated
     ? allItems
-    : allItems.filter(item => allowedRoutesForUnauthenticated.includes(item.url));
-
+    : allItems.filter(item => item.title !== 'Settings');
   useEffect(() => {
     const currentItem = items.find(item => item.url === pathname);
     if (currentItem && currentItem.title !== activeItem) {
@@ -83,12 +70,7 @@ export default function DashboardSidebar({
     router.replace('/login');
   };
 
-  const getInitial = (): string => {
-    return user?.name?.charAt(0).toUpperCase() || 'G';
-  };
-
-  const initial = getInitial();
-  const avatarColor = getAvatarColor(initial);
+const { initial, avatarColor } = useUserInitial(user?.name, user?.email);
 
   if (isAuthenticated === null) return null;
 

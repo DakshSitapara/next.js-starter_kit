@@ -1,58 +1,20 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+// import { useRouter } from 'next/navigation'
+// import { useEffect, useState } from 'react'
 import { AuthService } from '@/lib/useAuth'
 import { SectionCards } from '@/components/section-cards'
 import { Button } from '@/components/ui/button'
 import { Watch } from 'lucide-react'
 import { ChartAreaInteractive } from './chart-area-interactive'
-
-interface User {
-  name: string
-  email: string
-}
+import { useCurrentTime } from '@/hooks/useCurrentTime'
+import { useAuthUser } from '@/hooks/useAuthUser'
 
 export default function DashboardPage() {
-  const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [dateTime, setDateTime] = useState<string>(() => {
-    const now = new Date()
-    return formatDateTime(now)
-  })
+  const dateTime = useCurrentTime()
+  const { user, loading } = useAuthUser();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        if (!AuthService.isAuthenticated()) {
-          router.replace('/login')
-        } else {
-          const userData = AuthService.getAuthUser()
-          setUser(userData)
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    checkAuth()
-  }, [router])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDateTime(formatDateTime(new Date()))
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [])
-
-  function formatDateTime(date: Date) {
-    const hours = String(date.getHours()).padStart(2, '0')
-    const minutes = String(date.getMinutes()).padStart(2, '0')
-    const seconds = String(date.getSeconds()).padStart(2, '0')
-    return ` ${hours}:${minutes}:${seconds}`
-  }
-
-  if (isLoading || !user) {
+  if (loading || !user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />

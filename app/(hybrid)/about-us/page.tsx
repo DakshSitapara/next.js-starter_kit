@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import { MessageCircleQuestion, Mail, Github, Twitter } from 'lucide-react';
+import { MessageCircleQuestion, Mail, Github, Twitter, ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Arrow } from '@radix-ui/react-tooltip';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -29,16 +31,21 @@ const teamMembers = [
 
 export default function AboutUsPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-            About Us
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
-            Learn more about our app and the team behind it.
-          </p>
-        </div>
+            <div>
+      <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
+        <Link href="/">
+          <Button variant="ghost" size="icon">
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+        </Link>
+        About Us
+      </h1>
+      <p className="text-lg text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
+        Learn more about our app and the team behind it.
+      </p>
+    </div>
         <HoverCard>
           <HoverCardTrigger asChild>
             <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center gap-2">

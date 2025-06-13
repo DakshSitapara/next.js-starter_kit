@@ -28,7 +28,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
 
   useEffect(() => {
     if (typeof window !== 'undefined' && AuthService.isAuthenticated()) {
-      router.replace('/dashboard')
+      router.replace('/dashboard/Home')
     } else {
       setIsCheckingAuth(false)
     }
@@ -57,7 +57,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
 
     const success = await AuthService.login(formState.email, formState.password)
     if (success) {
-      router.push('/dashboard')
+      router.push('/dashboard/Home')
     } else {
       setFormState((prev) => ({
         ...prev,

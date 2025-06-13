@@ -12,16 +12,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-
-const getAvatarColor = (letter: string): string => {
-  const colors = [
-    'bg-red-600', 'bg-blue-600', 'bg-green-600', 'bg-purple-600', 'bg-orange-600',
-    'bg-indigo-600', 'bg-pink-600', 'bg-teal-600', 'bg-cyan-600', 'bg-amber-600',
-    'bg-lime-600', 'bg-emerald-600', 'bg-violet-600', 'bg-fuchsia-600', 'bg-rose-600',
-  ];
-  const index = letter.toUpperCase().charCodeAt(0) - 65;
-  return colors[index % colors.length] || 'bg-gray-600';
-};
+import { useAuthUser } from "@/hooks/useAuthUser";
+import { useUserInitial } from "@/hooks/useUserInitial";
 
 export default function HeroSection() {
 
@@ -45,37 +37,19 @@ export default function HeroSection() {
   //   );
   // }
 
-    const [user, setUser] = useState<{ name: string; email: string } | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-
-    useEffect(() => {
-      if (AuthService.isAuthenticated()) {
-        const userData = AuthService.getAuthUser();
-        setUser(userData);
-        setIsAuthenticated(true);
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
-    }, []);
-
-    const getInitial = (): string => {
-      if (user?.name) return user.name.charAt(0).toUpperCase();
-      if (user?.email) return user.email.charAt(0).toUpperCase();
-      return 'G';
-    };
-
-    const initial = getInitial();
-    const avatarColor = getAvatarColor(initial);
+    const { user, isAuthenticated, loading } = useAuthUser();
+    const { initial, avatarColor } = useUserInitial(user?.name, user?.email);
 
   return (
     <div className="items-center-safe dark:bg-black">
       {/* Top-right About Us button and if user is login than show avatar */}
       <div className="flex flex-col-1 gap-2 absolute top-4 right-4 z-50 mt-1">
         <div className="flex items-center gap-1">
-          {isAuthenticated && user ? (
+          {loading ? (
+              <div>Loading...</div>
+            ) :isAuthenticated && user ? (
                     <div className="flex items-center gap-3">
-                      <Link aria-label="user" href="/login">
+                      <Link aria-label="user" href="/dashboard">
                         <Tooltip>
                           <TooltipTrigger asChild>
                               <div className={`h-8 w-8 rounded-full flex items-center justify-center text-white text-sm font-semibold ${avatarColor}`}>
@@ -175,13 +149,13 @@ export default function HeroSection() {
               <Github className="w-5 h-5 bg-transparent" aria-label="GitHub icon" />
               <span>Star on GitHub</span>
             </Link>
-            <Link href="dashboard/about-us">
+            <Link href="/about-us">
             {/* <Tooltip>
               <TooltipTrigger asChild> */}
                 <Button 
                   aria-label="About Us"
                   size="lg"
-                  variant="ghost"
+                  variant="default"
                   className="rounded-full"
                 >
                   <MessageCircleQuestion className="h-6 w-6" />
