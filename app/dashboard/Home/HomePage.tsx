@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AuthService } from '@/lib/useAuth'
 import { SectionCards } from '@/components/section-cards'
-import { ChartAreaInteractive } from '@/app/dashboard/Home/chart-area-interactive'
 import { Button } from '@/components/ui/button'
 import { Watch } from 'lucide-react'
+import { ChartAreaInteractive } from './chart-area-interactive'
 
 interface User {
   name: string
