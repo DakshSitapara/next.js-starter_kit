@@ -56,7 +56,7 @@ export default function DashboardSidebar({
 
   const items = isAuthenticated
     ? allItems
-    : allItems.filter(item => item.title !== 'Settings');
+    : allItems.filter(item => item.title !== 'About Us');
   useEffect(() => {
     const currentItem = items.find(item => item.url === pathname);
     if (currentItem && currentItem.title !== activeItem) {

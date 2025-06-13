@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { AuthService } from "@/lib/useAuth";
-// import { useRouter } from "next/navigation";
 import { ArrowRight, Github, Sparkles, MessageCircleQuestion } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -16,26 +15,6 @@ import { useAuthUser } from "@/hooks/useAuthUser";
 import { useUserInitial } from "@/hooks/useUserInitial";
 
 export default function HeroSection() {
-
-  // const router = useRouter(); 
-
-  // const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined' && AuthService.isAuthenticated()) {
-  //     router.replace('/dashboard');
-  //   } else {
-  //     setIsCheckingAuth(false);
-  //   }
-  // }, [router]);
-
-  // if (isCheckingAuth) {
-  //   return (
-  //     <div className="flex items-center justify-center min-h-screen">
-  //       <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />
-  //     </div>
-  //   );
-  // }
 
     const { user, isAuthenticated, loading } = useAuthUser();
     const { initial, avatarColor } = useUserInitial(user?.name, user?.email);
@@ -156,7 +135,7 @@ export default function HeroSection() {
                   aria-label="About Us"
                   size="lg"
                   variant="default"
-                  className="rounded-full"
+                  className="rounded-full px-6 h-12 border-2"
                 >
                   <MessageCircleQuestion className="h-6 w-6" />
                       <span>About Us</span>
