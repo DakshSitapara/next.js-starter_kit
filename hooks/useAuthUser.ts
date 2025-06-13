@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation' // ✅ use this instead of `next/router` in App Router
+import { useRouter } from 'next/navigation' 
 import { AuthService } from '@/lib/useAuth'
 
 type User = {
