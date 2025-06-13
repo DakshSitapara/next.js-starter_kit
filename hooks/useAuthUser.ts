@@ -24,7 +24,6 @@ export function useAuthUser() {
       } else {
         setUser(null)
         setIsAuthenticated(false)
-        router.replace('/login') // ✅ redirect if not authenticated
       }
       setLoading(false)
     }
