@@ -13,7 +13,6 @@ import { MessageCircleQuestion, Sun, Moon } from 'lucide-react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { toast } from 'react-hot-toast';
 import Link from "next/link";
-import { AuthService } from '@/lib/useAuth';
 
 const routeMap: { [key: string]: string } = {
   '/dashboard/Home': 'Home',

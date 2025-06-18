@@ -1,7 +1,5 @@
 'use client'
 
-import { useState, useEffect } from "react";
-import { AuthService } from "@/lib/useAuth";
 import { ArrowRight, Github, Sparkles, MessageCircleQuestion } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";

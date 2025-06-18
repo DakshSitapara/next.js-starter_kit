@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import {
-  Calendar, Home, Inbox, MessageCircleQuestion, Settings, LogOut
+  Calendar, Home, Inbox, Settings, LogOut
 } from 'lucide-react';
 
 import {
@@ -15,6 +15,9 @@ import {
 import {
   HoverCard, HoverCardContent, HoverCardTrigger
 } from '@/components/ui/hover-card';
+import {
+  Popover,PopoverTrigger,PopoverContent
+} from '@/components/ui/popover'
 import {
   AlertDialog, AlertDialogTrigger, AlertDialogContent,
   AlertDialogHeader, AlertDialogTitle, AlertDialogFooter,
@@ -117,8 +120,8 @@ const { initial, avatarColor } = useUserInitial(user?.name, user?.email);
 
         <SidebarGroup>
           <SidebarGroupContent className="border-t pt-2 mt-4">
-            <HoverCard openDelay={200} closeDelay={200}>
-              <HoverCardTrigger asChild>
+            <Popover>
+              <PopoverTrigger asChild>
                 <SidebarMenuButton className="flex items-center gap-3 px-4 py-6 rounded-lg hover:bg-gray-100">
                   <div className={`h-9 w-9 rounded-full flex items-center justify-center text-white text-base font-semibold ${avatarColor}`}>
                     {initial}
@@ -127,9 +130,9 @@ const { initial, avatarColor } = useUserInitial(user?.name, user?.email);
                     {user?.name || 'Guest'}
                   </span>
                 </SidebarMenuButton>
-              </HoverCardTrigger>
+              </PopoverTrigger>
 
-              <HoverCardContent className="w-64 bg-white dark:bg-gray-800 border rounded-lg shadow-xl p-4 space-y-2">
+              <PopoverContent className="w-64 bg-white dark:bg-gray-800 border rounded-lg shadow-xl p-4 space-y-2">
                 {isAuthenticated && user ? (
                   <>
                     <div className="flex items-center gap-3">
@@ -168,8 +171,8 @@ const { initial, avatarColor } = useUserInitial(user?.name, user?.email);
                 ) : (
                   <Button onClick={() => router.push('/login')} className="w-full text-sm">Sign In</Button>
                 )}
-              </HoverCardContent>
-            </HoverCard>
+              </PopoverContent>
+            </Popover>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
