@@ -13,9 +13,6 @@ import {
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import {
-  HoverCard, HoverCardContent, HoverCardTrigger
-} from '@/components/ui/hover-card';
-import {
   Popover,PopoverTrigger,PopoverContent
 } from '@/components/ui/popover'
 import {
@@ -28,10 +25,10 @@ import { Button } from '@/components/ui/button';
 import { useUserInitial } from '@/hooks/useUserInitial';
 
 const allItems = [
-  { title: 'Home', url: '/dashboard/Home', icon: Home },
-  { title: 'Inbox', url: '/dashboard/inbox', icon: Inbox },
-  { title: 'Calendar', url: '/dashboard/calendar', icon: Calendar },
-  { title: 'Settings', url: '/dashboard/settings', icon: Settings },
+  { title: 'Home', url: '/home', icon: Home },
+  { title: 'Inbox', url: '/inbox', icon: Inbox },
+  { title: 'Calendar', url: '/calendar', icon: Calendar },
+  { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
 export default function DashboardSidebar({
