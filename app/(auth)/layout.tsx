@@ -15,10 +15,10 @@ import { toast } from 'react-hot-toast';
 import Link from "next/link";
 
 const routeMap: { [key: string]: string } = {
-  '/dashboard/Home': 'Home',
-  '/dashboard/inbox': 'Inbox',
-  '/dashboard/calendar': 'Calendar',
-  '/dashboard/settings': 'Settings',
+  '/home': 'Home',
+  '/inbox': 'Inbox',
+  '/calendar': 'Calendar',
+  '/settings': 'Settings',
 };
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

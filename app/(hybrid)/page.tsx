@@ -26,7 +26,7 @@ export default function Page() {
               <div>Loading...</div>
             ) :isAuthenticated && user ? (
                     <div className="flex items-center gap-3">
-                      <Link aria-label="user" href="/dashboard">
+                      <Link aria-label="user" href="/home">
                         <Tooltip>
                           <TooltipTrigger asChild>
                               <div className={`h-8 w-8 rounded-full flex items-center justify-center text-white text-sm font-semibold ${avatarColor}`}>

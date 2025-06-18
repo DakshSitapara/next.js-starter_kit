@@ -73,6 +73,10 @@ export default function SettingsPage() {
     router.replace('/login');
   };
 
+  // const hendleDeleataccount = () => {
+  //   AuthService.Deleataccount();
+  // }
+
   const handleResetPassword = () => {
     const currentUser = localStorage.getItem('authUser');
     AuthService.logout();

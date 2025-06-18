@@ -1,4 +1,3 @@
-// middleware.ts at project root
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -11,11 +10,11 @@ export function middleware(request: NextRequest) {
     isAuthenticated &&
     ['/login', '/register', '/forgot-password', '/reset-password'].includes(pathname)
   ) {
-    const fallback = `${origin}/dashboard/Home`;
+    const fallback = `${origin}/home`;
     return NextResponse.redirect(referer || fallback);
   }
 
-  if (pathname.startsWith('/dashboard') && !isAuthenticated) {
+  if (pathname.startsWith('/') && !isAuthenticated) {
     const redirectUrl = `${origin}/login?redirect=${encodeURIComponent(pathname + search)}`;
     return NextResponse.redirect(redirectUrl);
   }
@@ -29,6 +28,6 @@ export const config = {
     '/register',
     '/forgot-password',
     '/reset-password',
-    '/dashboard/:path*',
+    '/:path*',
   ],
 };

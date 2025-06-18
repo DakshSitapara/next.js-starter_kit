@@ -30,7 +30,7 @@ export function RegistrForm({ className, ...props }: React.ComponentProps<'div'>
 
   useEffect(() => {
     if (typeof window !== 'undefined' && AuthService.isAuthenticated()) {
-      router.replace('/dashboard')
+      router.replace('/home')
     } else {
       setIsCheckingAuth(false)
     }
@@ -64,7 +64,7 @@ export function RegistrForm({ className, ...props }: React.ComponentProps<'div'>
 
     const success = await AuthService.signup(formState.email, formState.name, formState.password)
     if (success) {
-      router.push('/dashboard')
+      router.push('/home')
     } else {
       setFormState((prev) => ({
         ...prev,
